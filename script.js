@@ -75,35 +75,35 @@
     });
   }
 
-  // Separadores cósmicos entre as seções: órbitas, brilho e marcas da casa.
+  // Separadores entre as seções: um feixe de magia com hue iridescente.
   const dividerTemplate = `
-    <div class="cosmos-divider" aria-hidden="true">
-      <span class="divider-glow"></span>
-      <span class="divider-orbit"><i></i><i></i><i></i></span>
-      <span class="divider-line line-left"></span>
-      <span class="divider-core"><svg class="glass-emblem"><use href="#vista-emblem" /></svg></span>
-      <span class="divider-line line-right"></span>
-      <span class="divider-marquee">VISTANOLOGY ✦ TECNOLOGIA PRONTA ✦ UM FUTURO MAIS BONITO ✦ VISTANOLOGY ✦ TECNOLOGIA PRONTA ✦ UM FUTURO MAIS BONITO ✦</span>
-      <span class="divider-word">VISTANOLOGY · UM FUTURO MAIS BONITO</span>
-      <span class="divider-motes" data-divider-motes></span>
+    <div class="hue-divider" aria-hidden="true">
+      <span class="hue-beam hue-beam-a"></span>
+      <span class="hue-beam hue-beam-b"></span>
+      <span class="hue-beam hue-beam-c"></span>
+      <span class="hue-rays"></span>
+      <span class="hue-core"><svg class="glass-emblem"><use href="#vista-emblem" /></svg></span>
+      <span class="hue-sparks" data-hue-sparks></span>
+      <span class="hue-word">VISTANOLOGY · MAGIA APLICADA</span>
     </div>`;
   const siteSections = Array.from(document.querySelectorAll(".site > section"));
   siteSections.slice(1).forEach((section) => section.insertAdjacentHTML("beforebegin", dividerTemplate));
-  document.querySelectorAll("[data-divider-motes]").forEach((container) => {
+  document.querySelectorAll("[data-hue-sparks]").forEach((container) => {
     if (reduceMotion) return;
     const frag = document.createDocumentFragment();
-    for (let index = 0; index < 14; index += 1) {
-      const mote = document.createElement("span");
+    for (let index = 0; index < 18; index += 1) {
+      const spark = document.createElement("span");
       const size = 2 + Math.random() * 3;
-      mote.className = "divider-mote";
-      mote.style.left = `${3 + Math.random() * 94}%`;
-      mote.style.top = `${25 + Math.random() * 55}%`;
-      mote.style.width = `${size}px`;
-      mote.style.height = `${size}px`;
-      mote.style.setProperty("--delay", `${Math.random() * 5}s`);
-      mote.style.setProperty("--duration", `${6 + Math.random() * 6}s`);
-      mote.style.setProperty("--drift", `${(Math.random() - .5) * 80}px`);
-      frag.appendChild(mote);
+      spark.className = "hue-spark";
+      spark.style.left = `${3 + Math.random() * 94}%`;
+      spark.style.top = `${28 + Math.random() * 52}%`;
+      spark.style.width = `${size}px`;
+      spark.style.height = `${size}px`;
+      spark.style.setProperty("--hue", String(Math.floor(Math.random() * 360)));
+      spark.style.setProperty("--delay", `${Math.random() * 5}s`);
+      spark.style.setProperty("--duration", `${4 + Math.random() * 5}s`);
+      spark.style.setProperty("--drift", `${(Math.random() - .5) * 90}px`);
+      frag.appendChild(spark);
     }
     container.appendChild(frag);
   });

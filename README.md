@@ -5,7 +5,7 @@ Página única de convite: uma ideia sua, tecnologia pronta. O único objetivo �
 ## Estrutura
 
 - `index.html` — loading (boot), animação do convite, seções, preços e os 6 protótipos clicáveis.
-- `styles.css` — estética aero/glass, separadores cósmicos, animações e modais.
+- `styles.css` — estética aero/glass, separadores em feixe de magia hue, animações e modais.
 - `script.js` — sequência de carregamento, fundo animado, escolha da mensagem, abertura/fechamento dos modais e escala dos iframes.
 - `assets/` — imagens reaproveitadas do `our-site` e ícone.
 
