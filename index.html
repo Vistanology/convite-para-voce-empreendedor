@@ -213,6 +213,7 @@
           <p class="eyebrow"><span></span> O CONVITE CONTINUA ABERTO</p>
           <h2 id="closing-title">Vamos dar forma<br /><em>à sua ideia?</em></h2>
           <a class="cta" data-chat-open href="#" aria-controls="chat-modal" aria-expanded="false"><svg class="wa-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2C6.5 2 2.1 6.4 2.1 11.94c0 1.75.46 3.46 1.32 4.96L2 22l5.24-1.37a9.9 9.9 0 0 0 4.8 1.22h.01c5.54 0 10.44-4.4 10.44-9.94C22.49 6.4 18.58 2 12.04 2Zm0 18.14a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.11.81.83-3.03-.2-.31a8.18 8.18 0 0 1-1.26-4.35c0-4.53 3.69-8.21 8.22-8.21 2.2 0 4.26.86 5.81 2.41a8.15 8.15 0 0 1 2.4 5.8c0 4.53-3.68 8.21-8.21 8.21Zm4.5-6.14c-.25-.12-1.47-.73-1.7-.81-.23-.08-.4-.12-.57.12-.17.25-.65.81-.8.98-.15.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23a7.56 7.56 0 0 1-1.51-1.89c-.15-.25-.02-.39.12-.51.12-.12.25-.29.37-.44.12-.15.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.12-.57-1.37-.78-1.88-.2-.49-.41-.42-.57-.43h-.49c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1s.9 2.44 1.03 2.61c.12.17 1.77 2.7 4.29 3.79.6.26 1.07.42 1.43.54.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.15-1.18-.06-.1-.23-.16-.48-.28Z" /></svg><span>Quero conversar com a Vista</span></a>
+          <button type="button" class="story-link" data-story-open aria-haspopup="dialog" aria-expanded="false">Conhecer a história da Vistanology →</button>
         </div>
       </div>
     </section>
@@ -294,6 +295,45 @@
       </form>
 
       <p class="chat-footnote">Condições promocionais especiais para quem chega pelo convite.</p>
+    </div>
+  </div>
+
+  <!-- A origem da Vistanology, aberta pelo emblema dos separadores -->
+  <div class="story-modal" id="story-modal" hidden role="dialog" aria-modal="true" aria-labelledby="story-title" aria-describedby="story-lead">
+    <div class="story-backdrop" data-story-close></div>
+    <div class="story-card" role="document">
+      <button type="button" class="story-close" data-story-close aria-label="Fechar história">×</button>
+      <div class="story-art" aria-hidden="true">
+        <span class="story-halo"></span>
+        <span class="story-core"><svg class="glass-emblem"><use href="#vista-emblem" /></svg></span>
+        <span class="story-sparks" id="story-sparks"></span>
+      </div>
+      <p class="story-kicker">VISTANOLOGY · NOSSA HISTÓRIA</p>
+      <h2 id="story-title">Um futuro que parece casa.</h2>
+      <p class="story-lead" id="story-lead">A Vistanology nasce daquele sentimento de quando o futuro parecia um lugar bonito: janelas de vidro, oceanos azuis e a ideia de que a tecnologia podia levar alguém a algo extraordinário. Não para viver no passado — para criar o que ainda pode existir.</p>
+      <div class="story-timeline">
+        <article class="story-step">
+          <span>01 / SONHE</span>
+          <h3>A ideia não precisa chegar pronta</h3>
+          <p>Muita coisa boa começa como sensação, problema solto ou vontade de ver algo bonito acontecer. A conversa já faz parte do processo.</p>
+        </article>
+        <article class="story-step">
+          <span>02 / EXPLORE</span>
+          <h3>Forma, cor e código juntos</h3>
+          <p>Transformamos ideias em software, experimentos visuais e mundos digitais. Cada vidro, luz e movimento existe para comunicar — não só para enfeitar.</p>
+        </article>
+        <article class="story-step">
+          <span>03 / EVOLUA</span>
+          <h3>Clareza antes de começar</h3>
+          <p>Escopo, prazo e investimento alinhados antes da primeira linha. Sem sucesso falso, sem promessa vazia: honestidade radical e vida em cada detalhe.</p>
+        </article>
+      </div>
+      <blockquote class="story-quote">“Tecnologia com alma. Um universo em construção. Que a gente construa um pouco de cor hoje.”</blockquote>
+      <div class="story-actions">
+        <button type="button" class="chat-send story-chat" data-story-chat><svg class="wa-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2C6.5 2 2.1 6.4 2.1 11.94c0 1.75.46 3.46 1.32 4.96L2 22l5.24-1.37a9.9 9.9 0 0 0 4.8 1.22h.01c5.54 0 10.44-4.4 10.44-9.94C22.49 6.4 18.58 2 12.04 2Zm0 18.14a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.11.81.83-3.03-.2-.31a8.18 8.18 0 0 1-1.26-4.35c0-4.53 3.69-8.21 8.22-8.21 2.2 0 4.26.86 5.81 2.41a8.15 8.15 0 0 1 2.4 5.8c0 4.53-3.68 8.21-8.21 8.21Zm4.5-6.14c-.25-.12-1.47-.73-1.7-.81-.23-.08-.4-.12-.57.12-.17.25-.65.81-.8.98-.15.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23a7.56 7.56 0 0 1-1.51-1.89c-.15-.25-.02-.39.12-.51.12-.12.25-.29.37-.44.12-.15.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.12-.57-1.37-.78-1.88-.2-.49-.41-.42-.57-.43h-.49c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1s.9 2.44 1.03 2.61c.12.17 1.77 2.7 4.29 3.79.6.26 1.07.42 1.43.54.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.15-1.18-.06-.1-.23-.16-.48-.28Z" /></svg><span>Quero conversar com a Vista</span></button>
+        <button type="button" class="story-back" data-story-close>Voltar ao convite</button>
+      </div>
+      <p class="story-footnote">Sem cadastro. O próximo passo é só uma mensagem no WhatsApp.</p>
     </div>
   </div>
 

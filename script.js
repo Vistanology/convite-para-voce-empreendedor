@@ -77,14 +77,14 @@
 
   // Separadores entre as seções: um feixe de magia com hue iridescente.
   const dividerTemplate = `
-    <div class="hue-divider" aria-hidden="true">
-      <span class="hue-beam hue-beam-a"></span>
-      <span class="hue-beam hue-beam-b"></span>
-      <span class="hue-beam hue-beam-c"></span>
-      <span class="hue-rays"></span>
-      <span class="hue-core"><svg class="glass-emblem"><use href="#vista-emblem" /></svg></span>
-      <span class="hue-sparks" data-hue-sparks></span>
-      <span class="hue-word">VISTANOLOGY · MAGIA APLICADA</span>
+    <div class="hue-divider">
+      <span class="hue-beam hue-beam-a" aria-hidden="true"></span>
+      <span class="hue-beam hue-beam-b" aria-hidden="true"></span>
+      <span class="hue-beam hue-beam-c" aria-hidden="true"></span>
+      <span class="hue-rays" aria-hidden="true"></span>
+      <button type="button" class="hue-core" data-story-open aria-haspopup="dialog" aria-expanded="false" aria-label="Conhecer a história da Vistanology"><svg class="glass-emblem" aria-hidden="true"><use href="#vista-emblem" /></svg></button>
+      <span class="hue-sparks" data-hue-sparks aria-hidden="true"></span>
+      <span class="hue-word" aria-hidden="true">TOQUE NO EMBLEMA · CONHEÇA A HISTÓRIA</span>
     </div>`;
   const siteSections = Array.from(document.querySelectorAll(".site > section"));
   siteSections.slice(1).forEach((section) => section.insertAdjacentHTML("beforebegin", dividerTemplate));
@@ -447,6 +447,95 @@
   modal.querySelector("[data-close]").addEventListener("click", closeModal);
   modalClose.addEventListener("click", closeModal);
 
+  // O emblema dos separadores abre a história da Vistanology em um modal.
+  const storyModal = document.getElementById("story-modal");
+  const storyCard = storyModal.querySelector(".story-card");
+  const storySparks = document.getElementById("story-sparks");
+  const storyTriggers = document.querySelectorAll("[data-story-open]");
+  const storyChat = storyModal.querySelector("[data-story-chat]");
+  const storyClose = storyModal.querySelector(".story-close");
+  let storyOpener = null;
+  let storyOverflow = "";
+  let storyCloseTimer = 0;
+
+  function buildStorySparks() {
+    storySparks.replaceChildren();
+    if (reduceMotion) return;
+    for (let index = 0; index < 20; index += 1) {
+      const spark = document.createElement("span");
+      spark.className = "story-spark";
+      spark.style.left = `${8 + Math.random() * 84}%`;
+      spark.style.top = `${10 + Math.random() * 80}%`;
+      spark.style.setProperty("--size", `${2 + Math.random() * 3}px`);
+      spark.style.setProperty("--hue", String(Math.floor(Math.random() * 360)));
+      spark.style.setProperty("--delay", `${Math.random() * 4}s`);
+      spark.style.setProperty("--duration", `${3 + Math.random() * 4}s`);
+      spark.style.setProperty("--drift", `${(Math.random() - .5) * 70}px`);
+      storySparks.appendChild(spark);
+    }
+  }
+
+  function openStory(trigger) {
+    if (!storyModal.hidden || !modal.hidden || !document.getElementById("chat-modal").hidden) return;
+    clearTimeout(storyCloseTimer);
+    storyOpener = trigger;
+    storyOverflow = document.body.style.overflow;
+    buildStorySparks();
+    storyModal.hidden = false;
+    document.body.style.overflow = "hidden";
+    storyTriggers.forEach((item) => item.setAttribute("aria-expanded", "true"));
+    requestAnimationFrame(() => {
+      storyModal.classList.add("is-open");
+      storyClose.focus({ preventScroll: true });
+    });
+  }
+
+  function closeStory() {
+    if (storyModal.hidden) return;
+    clearTimeout(storyCloseTimer);
+    storyModal.classList.remove("is-open");
+    document.body.style.overflow = storyOverflow;
+    storyTriggers.forEach((item) => item.setAttribute("aria-expanded", "false"));
+    storyCloseTimer = setTimeout(() => {
+      storyModal.hidden = true;
+      if (storyOpener) storyOpener.focus({ preventScroll: true });
+    }, delayed(360));
+  }
+
+  storyTriggers.forEach((trigger) => {
+    trigger.addEventListener("click", () => openStory(trigger));
+  });
+  storyModal.querySelectorAll("[data-story-close]").forEach((element) => {
+    element.addEventListener("click", closeStory);
+  });
+  storyChat.addEventListener("click", () => {
+    const chatTrigger = document.querySelector("[data-chat-open]");
+    closeStory();
+    setTimeout(() => {
+      if (chatTrigger) openChat(chatTrigger);
+    }, delayed(380));
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (storyModal.hidden) return;
+    if (event.key === "Escape") {
+      closeStory();
+      return;
+    }
+    if (event.key !== "Tab") return;
+    const items = Array.from(storyCard.querySelectorAll("button")).filter((element) => !element.disabled);
+    if (!items.length) return;
+    const first = items[0];
+    const last = items[items.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  });
+
   window.addEventListener("keydown", (event) => {
     if (modal.hidden) return;
     if (event.key === "Escape") {
@@ -511,7 +600,7 @@
   }
 
   function openChat(trigger, preset) {
-    if (!chatModal.hidden || !modal.hidden) return;
+    if (!chatModal.hidden || !modal.hidden || !storyModal.hidden) return;
     clearTimeout(chatCloseTimer);
     chatOpener = trigger;
     chatOverflow = document.body.style.overflow;

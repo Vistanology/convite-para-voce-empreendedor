@@ -5,7 +5,7 @@ Página única de convite: uma ideia sua, tecnologia pronta. O único objetivo �
 ## Estrutura
 
 - `index.html` — loading (boot), animação do convite, seções, preços e os 6 protótipos clicáveis.
-- `styles.css` — estética aero/glass, separadores em feixe de magia hue com linha branca que atravessa a página, animações e modais.
+- `styles.css` — estética aero/glass, separadores em feixe de magia hue, animações, modal da história e modais de contato/protótipos.
 - `script.js` — sequência de carregamento, fundo animado, escolha da mensagem, abertura/fechamento dos modais e escala dos iframes.
 - `assets/` — imagens reaproveitadas do `our-site` e ícone.
 
@@ -25,6 +25,10 @@ O CTA **“Quero conversar com a Vista”** abre um painel com duas opções:
 2. **Enviar informações para você se organizar** — abre campos opcionais de nome, negócio, objetivo, prazo, detalhe e investimento; `buildDetailedMessage()` monta o texto final com só o que foi preenchido.
 
 As duas opções terminam sempre no mesmo número, com link público `https://wa.me/5513955488379?text=…`. O selo “Estamos em promoção” aparece no hero e também no rodapé do painel.
+
+## História da Vistanology
+
+O emblema no centro de cada separador — e o link no convite final — abre o modal **“Um futuro que parece casa.”** O conteúdo usa a voz do `our-site`: “Sonhe. Explore. Evolua.”, a origem ligada a um futuro bonito que parecia casa, e os princípios **clareza antes de código**, **estética com propósito**, **honestidade radical** e **vida em cada detalhe**. Sem nomes de pessoa e sem dados inventados. O modal termina no mesmo CTA do WhatsApp.
 
 ## Valores
 
