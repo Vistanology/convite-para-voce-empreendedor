@@ -592,6 +592,9 @@ button, a, summary { -webkit-user-select: none; user-select: none; }
   .topbar-tag { padding: 7px 12px; }
   .section { padding-block: 62px; }
   .hero-inner { padding-top: 112px; padding-bottom: 72px; }
+  .hero-logo { width: clamp(150px, 40vw, 190px); margin-bottom: 24px; }
+  .offer-card { padding: 22px 20px 18px; border-radius: 18px; }
+  .offer-card p { font-size: 13px; }
   .cta { width: 100%; max-width: 340px; font-size: 14px; }
   .promo-badge { flex-wrap: wrap; justify-content: center; text-align: center; }
   .boot-panel { padding: 32px 24px 22px; }
