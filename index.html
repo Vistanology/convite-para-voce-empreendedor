@@ -44,13 +44,12 @@
         <img class="boot-bg" src="assets/aero-horizon.webp" alt="" width="1782" height="883" fetchpriority="high" />
       </picture>
       <span class="boot-haze"></span><span class="boot-mist"></span><span class="boot-rays"></span>
-      <span class="boot-vignette"></span><span class="boot-bloom" id="boot-bloom"></span><span class="boot-sheen"></span>
-      <div class="boot-particles" id="boot-particles"></div>
+      <span class="boot-vignette"></span><span class="boot-bloom" id="boot-bloom"></span>
     </div>
     <div class="boot-stage" id="boot-stage">
       <div class="boot-emblem">
         <span class="boot-halo"></span><span class="boot-halo-breath"></span>
-        <span class="boot-sphere"><svg class="glass-emblem"><use href="#vista-emblem" /></svg><span class="boot-sphere-sheen"></span></span>
+        <span class="boot-sphere"><svg class="glass-emblem"><use href="#vista-emblem" /></svg></span>
       </div>
       <p class="boot-wordmark">Vistanology</p>
       <div class="boot-loading">
@@ -150,26 +149,6 @@
       </div>
     </section>
 
-    <section class="section pricing" aria-labelledby="pricing-title">
-      <div class="shell">
-        <div class="section-head reveal">
-          <p class="eyebrow"><span></span> INVESTIMENTO SEM SURPRESA</p>
-          <h2 id="pricing-title">Escolha o ritmo.<br /><em>A gente cuida do resto.</em></h2>
-          <p class="section-sub">Pague mês a mês ou leve 12 meses à vista e ganhe 2 meses. Valores claros, sem letra miúda — a conversa ajusta o escopo junto com você.</p>
-          <div class="pricing-controls" role="group" aria-label="Tipo de projeto">
-            <button type="button" class="price-tab is-active" data-price-kind="page" aria-pressed="true">Páginas</button>
-            <button type="button" class="price-tab" data-price-kind="system" aria-pressed="false">Sistemas <small>a partir de R$ 500/mês</small></button>
-          </div>
-          <div class="pricing-controls billing-controls" role="group" aria-label="Forma de pagamento">
-            <button type="button" class="billing-tab is-active" data-site-billing="monthly" aria-pressed="true">Mensal</button>
-            <button type="button" class="billing-tab" data-site-billing="annual" aria-pressed="false">Anual à vista <small>2 meses grátis</small></button>
-          </div>
-        </div>
-        <div class="price-grid" id="price-grid" aria-live="polite"></div>
-        <p class="price-note reveal">Os valores são pontos de partida. Cada proposta é enviada antes de qualquer trabalho começar.</p>
-      </div>
-    </section>
-
     <section class="section prototypes" aria-labelledby="prototipos-title">
       <div class="shell">
         <div class="section-head reveal">
@@ -222,6 +201,39 @@
       <div class="shell footer-inner"><span>Vistanology</span><span>Um futuro mais bonito.</span><small>© <span id="year">2026</span></small></div>
     </footer>
   </main>
+
+  <!-- Sidebar: os preços ficam em uma aba, fora da landing -->
+  <aside class="sidebar" aria-label="Atalhos do convite">
+    <button type="button" class="sidebar-tab" data-pricing-open aria-controls="pricing-panel" aria-expanded="false">
+      <span class="sidebar-tab-icon" aria-hidden="true">R$</span><span class="sidebar-tab-label">Pricing</span>
+    </button>
+  </aside>
+
+  <div class="pricing-panel" id="pricing-panel" hidden role="dialog" aria-modal="true" aria-labelledby="pricing-title">
+    <div class="pricing-backdrop" data-pricing-close></div>
+    <div class="pricing-sheet" role="document">
+      <button type="button" class="pricing-close" data-pricing-close aria-label="Fechar preços">×</button>
+      <div class="pricing">
+        <div class="sheet-inner">
+          <div class="section-head">
+            <p class="eyebrow"><span></span> INVESTIMENTO SEM SURPRESA</p>
+            <h2 id="pricing-title">Escolha o ritmo.<br /><em>A gente cuida do resto.</em></h2>
+            <p class="section-sub">Pague mês a mês ou leve 12 meses à vista e ganhe 2 meses. Valores claros, sem letra miúda — a conversa ajusta o escopo junto com você.</p>
+            <div class="pricing-controls" role="group" aria-label="Tipo de projeto">
+              <button type="button" class="price-tab is-active" data-price-kind="page" aria-pressed="true">Páginas</button>
+              <button type="button" class="price-tab" data-price-kind="system" aria-pressed="false">Sistemas <small>a partir de R$ 500/mês</small></button>
+            </div>
+            <div class="pricing-controls billing-controls" role="group" aria-label="Forma de pagamento">
+              <button type="button" class="billing-tab is-active" data-site-billing="monthly" aria-pressed="true">Mensal</button>
+              <button type="button" class="billing-tab" data-site-billing="annual" aria-pressed="false">Anual à vista <small>2 meses grátis</small></button>
+            </div>
+          </div>
+          <div class="price-grid" id="price-grid" aria-live="polite"></div>
+          <p class="price-note">Os valores são pontos de partida. Cada proposta é enviada antes de qualquer trabalho começar.</p>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Escolha do primeiro contato: o WhatsApp já abre com a mensagem pronta -->
   <div class="chat-modal" id="chat-modal" hidden role="dialog" aria-modal="true" aria-labelledby="chat-title">

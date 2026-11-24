@@ -4,9 +4,9 @@ Página única de convite: uma ideia sua, tecnologia pronta. O único objetivo �
 
 ## Estrutura
 
-- `index.html` — loading (boot), animação do convite, seções, preços e os 6 protótipos clicáveis.
-- `styles.css` — estética aero/glass, separadores em feixe de magia hue, animações, modal da história e modais de contato/protótipos.
-- `script.js` — sequência de carregamento, fundo animado, escolha da mensagem, abertura/fechamento dos modais e escala dos iframes.
+- `index.html` — loading (boot), animação do convite, seções compactas, 6 protótipos, sidebar com a aba **Pricing** e modais.
+- `styles.css` — estética aero/glass, boot escalável sem partículas, separadores em feixe hue, drawer de preços e modais.
+- `script.js` — sequência de carregamento, fundo animado, drawer de preços, escolha da mensagem, abertura/fechamento dos modais e escala dos iframes.
 - `assets/` — imagens reaproveitadas do `our-site` e ícone.
 
 ## WhatsApp
@@ -32,13 +32,13 @@ O emblema no centro de cada separador — e o link no convite final — abre o m
 
 ## Valores
 
-A seção **Investimento sem surpresa** mostra as faixas e alterna entre tipo de projeto e forma de pagamento:
+Os preços **não ficam na landing**. A landing mantém só o convite e o essencial. A aba **Pricing** na sidebar abre um drawer lateral com **Investimento sem surpresa**, onde as faixas alternam entre tipo de projeto e forma de pagamento:
 
 - **Páginas:** R$ 100–500, R$ 600–900 e R$ 1.200–1.500 por mês.
 - **Sistemas:** a partir de R$ 500/mês, com faixas de R$ 500–900, R$ 1.200–1.500 e sob medida.
 - **Anual à vista:** 10x o valor mensal, equivalente a 12 meses com 2 grátis.
 
-Clicar num cartão abre o painel do WhatsApp já com o objetivo, o regime de pagamento e a faixa escolhidos. No painel, trocar o objetivo ou o pagamento recalcula as opções de investimento antes de gerar a mensagem.
+Clicar num cartão fecha o drawer e abre o painel do WhatsApp já com o objetivo, o regime de pagamento e a faixa escolhidos. No painel, trocar o objetivo ou o pagamento recalcula as opções de investimento antes de gerar a mensagem.
 
 ## Protótipos
 

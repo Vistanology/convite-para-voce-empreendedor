@@ -39,7 +39,6 @@
   const tip = document.getElementById("boot-tip");
   const status = document.getElementById("boot-status");
   const bloom = document.getElementById("boot-bloom");
-  const particles = document.getElementById("boot-particles");
   const frame = document.querySelector(".boot-bg-frame");
 
   // O fundo do convite respira: luz, partículas e um leve parallax.
@@ -137,6 +136,64 @@
     return kind === "system" ? "Um sistema" : "Uma landing page";
   }
 
+  const pricingPanel = document.getElementById("pricing-panel");
+  const pricingSheet = pricingPanel.querySelector(".pricing-sheet");
+  const pricingOpen = document.querySelector("[data-pricing-open]");
+  const pricingClose = pricingPanel.querySelector(".pricing-close");
+  let pricingOverflow = "";
+  let pricingCloseTimer = 0;
+
+  function openPricing() {
+    if (!pricingPanel.hidden || !document.getElementById("chat-modal").hidden || !document.getElementById("browser-modal").hidden || !document.getElementById("story-modal").hidden) return;
+    clearTimeout(pricingCloseTimer);
+    pricingOverflow = document.body.style.overflow;
+    pricingPanel.hidden = false;
+    document.body.style.overflow = "hidden";
+    pricingOpen.setAttribute("aria-expanded", "true");
+    requestAnimationFrame(() => {
+      pricingPanel.classList.add("is-open");
+      pricingClose.focus({ preventScroll: true });
+    });
+  }
+
+  function closePricing(restoreFocus = true) {
+    if (pricingPanel.hidden) return;
+    clearTimeout(pricingCloseTimer);
+    pricingPanel.classList.remove("is-open");
+    document.body.style.overflow = pricingOverflow;
+    pricingOpen.setAttribute("aria-expanded", "false");
+    pricingCloseTimer = setTimeout(() => {
+      pricingPanel.hidden = true;
+      if (restoreFocus) pricingOpen.focus({ preventScroll: true });
+    }, delayed(400));
+  }
+
+  pricingOpen.addEventListener("click", openPricing);
+  pricingPanel.querySelectorAll("[data-pricing-close]").forEach((element) => {
+    element.addEventListener("click", () => closePricing());
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (pricingPanel.hidden) return;
+    if (event.key === "Escape") {
+      closePricing();
+      return;
+    }
+    if (event.key !== "Tab") return;
+    const items = Array.from(pricingSheet.querySelectorAll("button, a[href]"))
+      .filter((element) => !element.closest("[hidden]") && !element.disabled);
+    if (!items.length) return;
+    const first = items[0];
+    const last = items[items.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  });
+
   const priceGrid = document.getElementById("price-grid");
   let sitePriceKind = "page";
   let siteBilling = "monthly";
@@ -189,39 +246,18 @@
     const card = event.target.closest("[data-price-card]");
     if (!card) return;
     const plan = PRICE_PLANS[card.dataset.kind][Number(card.dataset.tier)];
-    openChat(document.querySelector("[data-chat-open]"), {
+    const preset = {
       goal: goalForKind(card.dataset.kind),
       billing: card.dataset.billing,
       budget: priceRange(plan, card.dataset.billing),
-    });
+    };
+    closePricing(false);
+    setTimeout(() => openChat(document.querySelector("[data-chat-open]"), preset), delayed(420));
   });
   renderPrices();
 
-  // Partículas do mesmo vocabulário visual do our-site.
-  const motes = [
-    [7, 46, 3, .4, 8.2, 26], [14, 58, 2, 2.6, 10, -18], [22, 36, 4, 1.2, 9.4, 22],
-    [31, 66, 2, 3.4, 8.8, -14], [39, 30, 3, .9, 11, 20], [47, 52, 2, 2, 9.6, -24],
-    [55, 42, 3, 1.7, 10.6, 16], [63, 62, 2, 3, 8.4, -20], [70, 34, 4, .6, 9.8, 24],
-    [78, 56, 2, 2.4, 10.2, -16], [85, 44, 3, 1.4, 9, 18], [92, 60, 2, 3.8, 10.8, -22],
-  ];
+  // Núcleo limpo: só o leve parallax do cosmos e da aura, sem partículas.
   if (!reduceMotion) {
-    const frag = document.createDocumentFragment();
-    motes.forEach(([left, top, size, delay, duration, drift]) => {
-      const el = document.createElement("span");
-      el.className = "boot-mote";
-      el.style.cssText = `left:${left}%;top:${top}%;width:${size}px;height:${size}px;--delay:${delay}s;--duration:${duration}s;--drift:${drift}px`;
-      frag.appendChild(el);
-    });
-    for (let index = 0; index < 16; index += 1) {
-      const el = document.createElement("span");
-      const size = 2 + Math.random() * 3;
-      const hue = Math.floor(Math.random() * 360);
-      el.className = "boot-spark";
-      el.style.cssText = `left:${6 + Math.random() * 88}%;top:${14 + Math.random() * 72}%;width:${size}px;height:${size}px;--hue:${hue};--delay:${Math.random() * 5}s;--duration:${5 + Math.random() * 5}s;--drift:${(Math.random() - .5) * 80}px`;
-      frag.appendChild(el);
-    }
-    particles.appendChild(frag);
-
     boot.addEventListener("pointermove", (event) => {
       const rect = boot.getBoundingClientRect();
       const x = (event.clientX / rect.width - .5) * 2;
@@ -417,7 +453,7 @@
   }
 
   function openPrototype(button) {
-    if (!modal.hidden) return;
+    if (!modal.hidden || !pricingPanel.hidden || !document.getElementById("story-modal").hidden || !document.getElementById("chat-modal").hidden) return;
     clearTimeout(closeTimer);
     opener = button;
     previousOverflow = document.body.style.overflow;
@@ -474,7 +510,7 @@
   }
 
   function openStory(trigger) {
-    if (!storyModal.hidden || !modal.hidden || !document.getElementById("chat-modal").hidden) return;
+    if (!storyModal.hidden || !modal.hidden || !pricingPanel.hidden || !document.getElementById("chat-modal").hidden) return;
     clearTimeout(storyCloseTimer);
     storyOpener = trigger;
     storyOverflow = document.body.style.overflow;
@@ -598,7 +634,7 @@
   }
 
   function openChat(trigger, preset) {
-    if (!chatModal.hidden || !modal.hidden || !storyModal.hidden) return;
+    if (!chatModal.hidden || !modal.hidden || !storyModal.hidden || !pricingPanel.hidden) return;
     clearTimeout(chatCloseTimer);
     chatOpener = trigger;
     chatOverflow = document.body.style.overflow;
