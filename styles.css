@@ -200,8 +200,8 @@ button, a, summary { -webkit-user-select: none; user-select: none; }
 .browser-heading h2 { margin: 3px 0 0; font-size: clamp(17px, 2.5vw, 24px); font-weight: 500; letter-spacing: -.5px; }
 .browser-heading a { margin-left: auto; padding: 8px 14px; border: 1px solid #b1f4ff5e; border-radius: 999px; background: linear-gradient(#a0efff4d, #00a7f640); font-size: 11px; font-weight: 600; white-space: nowrap; }
 .browser-heading a:hover { background: #00a7f680; }
-.browser-viewport { position: relative; flex: 1; min-height: 0; margin: 0 22px; overflow: hidden; border: 1px solid #bfeaff4d; border-radius: 16px 16px 0 0; background: #f5fbff; }
-.browser-viewport iframe { position: absolute; top: 0; left: 0; width: 1440px; height: 900px; max-width: none; border: 0; background: #f5fbff; opacity: 0; transform-origin: top left; transition: opacity .55s ease .1s; }
+.browser-viewport { position: relative; flex: 1; min-height: 0; margin: 0 22px; overflow: hidden; border: 1px solid #bfeaff4d; border-bottom: 0; border-radius: 16px 16px 0 0; background: radial-gradient(ellipse at 50% 30%, #0a4a70, #031423 78%); }
+.browser-viewport iframe { position: absolute; top: 0; left: 0; width: 1440px; height: 900px; max-width: none; border: 0; background: #031423; opacity: 0; transform-origin: top left; transition: opacity .55s ease .1s; }
 .browser-viewport.is-loaded iframe { opacity: 1; }
 .browser-loading { position: absolute; inset: 0; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; background: radial-gradient(ellipse at 50% 40%, #0c5a86, #031423 78%); color: #cdeefb; font-size: 12px; letter-spacing: .4px; transition: opacity .4s ease; }
 .browser-viewport.is-loaded .browser-loading { opacity: 0; pointer-events: none; }
