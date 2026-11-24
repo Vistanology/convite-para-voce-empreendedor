@@ -6,18 +6,25 @@ Página única de convite: uma ideia sua, tecnologia pronta. O único objetivo �
 
 - `index.html` — loading (boot), animação do convite, seções e os 6 protótipos clicáveis.
 - `styles.css` — estética aero/glass, animações e modal com navegador integrado.
-- `script.js` — sequência de carregamento, partículas, CTA do WhatsApp, abertura/fechamento do modal e escala dos iframes.
+- `script.js` — sequência de carregamento, fundo animado, escolha da mensagem, abertura/fechamento dos modais e escala dos iframes.
 - `assets/` — imagens reaproveitadas do `our-site` e ícone.
 
 ## WhatsApp
 
-Número e mensagem pré-preenchida no topo de `script.js`:
+Número e mensagem curta no topo de `script.js`:
 
 ```js
 const WHATSAPP_NUMBER = "5513955488379";
 const WHATSAPP_DISPLAY = "+55 (13) 95548-8379";
-const INVITE_MESSAGE = "…";
+const SIMPLE_MESSAGE = "…";
 ```
+
+O CTA **“Quero conversar com a Vista”** abre um painel com duas opções:
+
+1. **Oi, quero conhecer** — envia `SIMPLE_MESSAGE` direto no WhatsApp.
+2. **Enviar informações para você se organizar** — abre campos opcionais de nome, negócio, objetivo, prazo, detalhe e investimento; `buildDetailedMessage()` monta o texto final com só o que foi preenchido.
+
+As duas opções terminam sempre no mesmo número, com link público `https://wa.me/5513955488379?text=…`. O selo “Estamos em promoção” aparece no hero e também no rodapé do painel.
 
 ## Protótipos
 

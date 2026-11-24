@@ -3,16 +3,27 @@
 
   const WHATSAPP_NUMBER = "5513955488379";
   const WHATSAPP_DISPLAY = "+55 (13) 95548-8379";
-  const INVITE_MESSAGE =
-    "Olá! Vim pelo convite da Vistanology e gostaria de conversar sobre a criação de um sistema ou landing page para o meu negócio. Pode me explicar como funciona, o prazo e o investimento? Obrigado!";
+  const SIMPLE_MESSAGE =
+    "Oi, quero conhecer! Vim pelo convite da Vistanology e vi que estão em promoção. Gostaria de conversar sobre criar um sistema ou landing page para o meu negócio e saber as condições. Obrigado!";
 
-  const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(INVITE_MESSAGE)}`;
-  document.querySelectorAll("[data-wa]").forEach((link) => {
-    link.setAttribute("href", waUrl);
-    link.setAttribute("target", "_blank");
-    link.setAttribute("rel", "noopener noreferrer");
-    link.setAttribute("aria-label", "Enviar convite no WhatsApp para " + WHATSAPP_DISPLAY);
-  });
+  const waUrl = (message) => `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+  const chatTriggers = document.querySelectorAll("[data-chat-open]");
+
+  function pointTriggers(message) {
+    chatTriggers.forEach((link) => {
+      link.setAttribute("href", waUrl(message));
+      link.setAttribute("target", "_blank");
+      link.setAttribute("rel", "noopener noreferrer");
+      link.setAttribute("aria-label", "Quero conversar com a Vista — escolher a mensagem no WhatsApp");
+    });
+  }
+
+  function openWhatsapp(message) {
+    pointTriggers(message);
+    window.open(waUrl(message), "_blank", "noopener,noreferrer");
+  }
+
+  pointTriggers(SIMPLE_MESSAGE);
   document.getElementById("wa-display").textContent = WHATSAPP_DISPLAY;
   document.getElementById("year").textContent = String(new Date().getFullYear());
 
@@ -30,6 +41,39 @@
   const bloom = document.getElementById("boot-bloom");
   const particles = document.getElementById("boot-particles");
   const frame = document.querySelector(".boot-bg-frame");
+
+  // O fundo do convite respira: luz, partículas e um leve parallax.
+  const hero = document.querySelector(".hero");
+  const heroBg = document.querySelector(".hero-bg");
+  const heroMotes = document.querySelector(".hero-motes");
+  if (!reduceMotion && hero && heroBg && heroMotes) {
+    const heroFrag = document.createDocumentFragment();
+    for (let index = 0; index < 18; index += 1) {
+      const mote = document.createElement("span");
+      const size = 2 + Math.random() * 3;
+      mote.className = "hero-mote";
+      mote.style.left = `${4 + Math.random() * 92}%`;
+      mote.style.top = `${18 + Math.random() * 74}%`;
+      mote.style.width = `${size}px`;
+      mote.style.height = `${size}px`;
+      mote.style.setProperty("--delay", `${Math.random() * 6}s`);
+      mote.style.setProperty("--duration", `${7 + Math.random() * 7}s`);
+      mote.style.setProperty("--drift", `${(Math.random() - .5) * 90}px`);
+      heroFrag.appendChild(mote);
+    }
+    heroMotes.appendChild(heroFrag);
+    hero.addEventListener("pointermove", (event) => {
+      const rect = hero.getBoundingClientRect();
+      const x = (event.clientX / rect.width - .5) * 2;
+      const y = (event.clientY / rect.height - .5) * 2;
+      heroBg.style.setProperty("--hero-x", `${x * -14}px`);
+      heroBg.style.setProperty("--hero-y", `${y * -9}px`);
+    });
+    hero.addEventListener("pointerleave", () => {
+      heroBg.style.setProperty("--hero-x", "0px");
+      heroBg.style.setProperty("--hero-y", "0px");
+    });
+  }
 
   // Partículas do mesmo vocabulário visual do our-site.
   const motes = [
@@ -291,6 +335,116 @@
     const focusable = [modalClose, modalExternal];
     const first = focusable[0];
     const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  });
+
+  // O botão pergunta como começar e monta a mensagem com o que for informado.
+  const chatModal = document.getElementById("chat-modal");
+  const chatCard = chatModal.querySelector(".chat-card");
+  const chatOptions = document.getElementById("chat-options");
+  const chatForm = document.getElementById("chat-form");
+  let chatOpener = null;
+  let chatOverflow = "";
+  let chatCloseTimer = 0;
+
+  function openChat(trigger) {
+    if (!chatModal.hidden || !modal.hidden) return;
+    clearTimeout(chatCloseTimer);
+    chatOpener = trigger;
+    chatOverflow = document.body.style.overflow;
+    chatOptions.hidden = false;
+    chatForm.hidden = true;
+    chatModal.hidden = false;
+    document.body.style.overflow = "hidden";
+    trigger.setAttribute("aria-expanded", "true");
+    requestAnimationFrame(() => {
+      chatModal.classList.add("is-open");
+      chatOptions.querySelector("button").focus({ preventScroll: true });
+    });
+  }
+
+  function closeChat() {
+    if (chatModal.hidden) return;
+    clearTimeout(chatCloseTimer);
+    chatModal.classList.remove("is-open");
+    document.body.style.overflow = chatOverflow;
+    chatTriggers.forEach((trigger) => trigger.setAttribute("aria-expanded", "false"));
+    chatCloseTimer = setTimeout(() => {
+      chatModal.hidden = true;
+      if (chatOpener) chatOpener.focus({ preventScroll: true });
+    }, delayed(320));
+  }
+
+  function fieldValue(id) {
+    return document.getElementById(id).value.trim();
+  }
+
+  function buildDetailedMessage() {
+    const details = [
+      ["Como te chamar", fieldValue("chat-name")],
+      ["Negócio/projeto", fieldValue("chat-business")],
+      ["O que quero criar", fieldValue("chat-goal")],
+      ["Prazo", fieldValue("chat-deadline")],
+      ["O que precisa resolver", fieldValue("chat-detail")],
+      ["Investimento", fieldValue("chat-budget")],
+    ].filter(([, value]) => value);
+    const lines = [
+      "Olá, Vista! Vim pelo convite da Vistanology e quero adiantar algumas informações para você se organizar:",
+      "",
+    ];
+    details.forEach(([label, value]) => lines.push(`• ${label}: ${value}`));
+    lines.push("", "Pode me explicar como funciona, o prazo, o investimento e as condições da promoção com base nesses detalhes? Obrigado!");
+    return lines.join("\n");
+  }
+
+  chatTriggers.forEach((trigger) => {
+    trigger.addEventListener("click", (event) => {
+      event.preventDefault();
+      openChat(trigger);
+    });
+  });
+  chatModal.querySelectorAll("[data-chat-close]").forEach((element) => {
+    element.addEventListener("click", closeChat);
+  });
+  chatOptions.querySelector("[data-chat-simple]").addEventListener("click", () => {
+    openWhatsapp(SIMPLE_MESSAGE);
+    closeChat();
+  });
+  chatOptions.querySelector("[data-chat-guided]").addEventListener("click", () => {
+    chatOptions.hidden = true;
+    chatForm.hidden = false;
+    chatForm.querySelector("input").focus({ preventScroll: true });
+  });
+  chatForm.querySelector("[data-chat-back]").addEventListener("click", () => {
+    chatForm.hidden = true;
+    chatOptions.hidden = false;
+    chatOptions.querySelector("[data-chat-guided]").focus({ preventScroll: true });
+  });
+  chatForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const message = buildDetailedMessage();
+    openWhatsapp(message);
+    closeChat();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (chatModal.hidden) return;
+    if (event.key === "Escape") {
+      closeChat();
+      return;
+    }
+    if (event.key !== "Tab") return;
+    const items = Array.from(chatCard.querySelectorAll("button, input, select, textarea, a[href]"))
+      .filter((element) => !element.closest("[hidden]") && !element.disabled);
+    if (!items.length) return;
+    const first = items[0];
+    const last = items[items.length - 1];
     if (event.shiftKey && document.activeElement === first) {
       event.preventDefault();
       last.focus();
