@@ -204,10 +204,6 @@
     [55, 42, 3, 1.7, 10.6, 16], [63, 62, 2, 3, 8.4, -20], [70, 34, 4, .6, 9.8, 24],
     [78, 56, 2, 2.4, 10.2, -16], [85, 44, 3, 1.4, 9, 18], [92, 60, 2, 3.8, 10.8, -22],
   ];
-  const bubbles = [
-    [12, 13, .6, 8.4], [24, 8, 2.6, 9.8], [37, 17, 1.6, 10.6], [52, 9, 3.4, 8.8],
-    [66, 15, 1.1, 11.4], [79, 7, 4.1, 9.2], [90, 11, 2.2, 10],
-  ];
   if (!reduceMotion) {
     const frag = document.createDocumentFragment();
     motes.forEach(([left, top, size, delay, duration, drift]) => {
@@ -216,12 +212,14 @@
       el.style.cssText = `left:${left}%;top:${top}%;width:${size}px;height:${size}px;--delay:${delay}s;--duration:${duration}s;--drift:${drift}px`;
       frag.appendChild(el);
     });
-    bubbles.forEach(([left, size, delay, duration]) => {
+    for (let index = 0; index < 16; index += 1) {
       const el = document.createElement("span");
-      el.className = "boot-bubble";
-      el.style.cssText = `left:${left}%;width:${size}px;height:${size}px;--delay:${delay}s;--duration:${duration}s`;
+      const size = 2 + Math.random() * 3;
+      const hue = Math.floor(Math.random() * 360);
+      el.className = "boot-spark";
+      el.style.cssText = `left:${6 + Math.random() * 88}%;top:${14 + Math.random() * 72}%;width:${size}px;height:${size}px;--hue:${hue};--delay:${Math.random() * 5}s;--duration:${5 + Math.random() * 5}s;--drift:${(Math.random() - .5) * 80}px`;
       frag.appendChild(el);
-    });
+    }
     particles.appendChild(frag);
 
     boot.addEventListener("pointermove", (event) => {
