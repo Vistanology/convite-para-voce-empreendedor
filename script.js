@@ -34,45 +34,109 @@
   const stage = document.getElementById("boot-stage");
   const reveal = document.getElementById("reveal");
   const skip = document.getElementById("boot-skip");
+  const offButton = boot.querySelector(".boot-off");
   const bar = document.getElementById("boot-bar");
   const fill = document.getElementById("boot-fill");
   const tip = document.getElementById("boot-tip");
   const status = document.getElementById("boot-status");
-  const bloom = document.getElementById("boot-bloom");
-  const frame = document.querySelector(".boot-bg-frame");
+  const canvas = document.getElementById("boot-particles");
 
-  // O fundo do convite respira: luz, partículas e um leve parallax.
-  const hero = document.querySelector(".hero");
-  const heroBg = document.querySelector(".hero-bg");
-  const heroMotes = document.querySelector(".hero-motes");
-  if (!reduceMotion && hero && heroBg && heroMotes) {
-    const heroFrag = document.createDocumentFragment();
-    for (let index = 0; index < 18; index += 1) {
-      const mote = document.createElement("span");
-      const size = 2 + Math.random() * 3;
-      mote.className = "hero-mote";
-      mote.style.left = `${4 + Math.random() * 92}%`;
-      mote.style.top = `${18 + Math.random() * 74}%`;
-      mote.style.width = `${size}px`;
-      mote.style.height = `${size}px`;
-      mote.style.setProperty("--delay", `${Math.random() * 6}s`);
-      mote.style.setProperty("--duration", `${7 + Math.random() * 7}s`);
-      mote.style.setProperty("--drift", `${(Math.random() - .5) * 90}px`);
-      heroFrag.appendChild(mote);
-    }
-    heroMotes.appendChild(heroFrag);
-    hero.addEventListener("pointermove", (event) => {
-      const rect = hero.getBoundingClientRect();
-      const x = (event.clientX / rect.width - .5) * 2;
-      const y = (event.clientY / rect.height - .5) * 2;
-      heroBg.style.setProperty("--hero-x", `${x * -14}px`);
-      heroBg.style.setProperty("--hero-y", `${y * -9}px`);
-    });
-    hero.addEventListener("pointerleave", () => {
-      heroBg.style.setProperty("--hero-x", "0px");
-      heroBg.style.setProperty("--hero-y", "0px");
-    });
-  }
+  const particles = (() => {
+    if (reduceMotion || !canvas?.getContext) return { active: false, draw: () => {}, dispose: () => {}, paused: true };
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return { active: false, draw: () => {}, dispose: () => {}, paused: true };
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const state = { x: 0, y: 0, offsetWidth: 0, offsetHeight: 0, raf: 0, last: 0, on: true };
+    let raf = 0;
+    let seed = Date.now();
+    const random = () => {
+      seed = (seed * 16807) % 2147483647;
+      return (seed - 1) / 2147483646;
+    };
+    const items = Array.from({ length: 0 }, () => null);
+
+    const add = () => {
+      const width = Math.max(80, canvas.clientWidth || 0);
+      const height = Math.max(80, canvas.clientHeight || 0);
+      const count = Math.min(28, Math.max(8, Math.round((width * height) / 140000)));
+      for (let index = 0; index < count; index += 1) {
+        items.push({
+          x: random() * width,
+          y: -random() * 120,
+          z: 0.22 + random() * 0.9,
+          speed: 14 + random() * 22,
+          drift: (random() - .5) * 20,
+          bright: .35 + random() * .65,
+        });
+      }
+    };
+    add();
+
+    const draw = () => {
+      const width = Math.max(80, canvas.clientWidth || 0);
+      const height = Math.max(80, canvas.clientHeight || 0);
+      if (state.offsetWidth !== width || state.offsetHeight !== height) {
+        state.offsetWidth = width;
+        state.offsetHeight = height;
+        canvas.width = Math.max(1, Math.round(width * dpr));
+        canvas.height = Math.max(1, Math.round(height * dpr));
+      }
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, width, height);
+      const now = performance.now();
+      const dt = Math.min(now - state.last, 80) / 1000;
+      state.last = now;
+      const time = now * .0012;
+      items.forEach((item) => {
+        item.y += item.speed * dt;
+        item.x += item.drift + Math.sin(item.y * .002 + time) * 1.5;
+        const dx = item.x - state.x;
+        const dy = item.y - state.y;
+        const dist = Math.hypot(dx, dy);
+        const size = item.bright * (1.8 + item.z * 2.2) * Math.max(0, 1 - dist / 900);
+        if (size < .5) return;
+        const shift = Math.sin(time * 3 + dist * .02) * 16;
+        ctx.globalAlpha = Math.max(.1, size / 7);
+        const gradient = ctx.createRadialGradient(item.x + shift, item.y + shift, 0, item.x + shift, item.y + shift, size);
+        gradient.addColorStop(0, "#ffffff");
+        gradient.addColorStop(.5, "#7edbff");
+        gradient.addColorStop(1, "transparent");
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(item.x + shift, item.y + shift, size, 0, Math.PI * 2);
+        ctx.fill();
+        if (dist < 180) {
+          const alpha = Math.max(0, 1 - dist / 180);
+          ctx.globalAlpha = alpha * .22;
+          ctx.beginPath();
+          ctx.moveTo(item.x, item.y);
+          ctx.lineTo(state.x, state.y);
+          ctx.strokeStyle = "#4ee0ff";
+          ctx.lineWidth = .7;
+          ctx.stroke();
+        }
+      });
+      for (let index = items.length - 1; index >= 0; index -= 1) {
+        if (items[index].y > height + 40) items.splice(index, 1);
+      }
+      if (items.length < Math.min(28, Math.max(8, Math.round((state.offsetWidth * state.offsetHeight) / 140000)))) add();
+    };
+
+    const loop = () => {
+      if (!state.on || !canvas.isConnected) return;
+      if (document.visibilityState === "visible") draw();
+      state.on && (raf = requestAnimationFrame(loop));
+    };
+    raf = requestAnimationFrame(loop);
+    const dispose = () => {
+      state.on = false;
+      cancelAnimationFrame(raf);
+    };
+    return { active: true, draw, dispose, setPos: (x, y) => { state.x = x; state.y = y; }, pause: dispose, resume: () => { if (state.on !== true) { state.on = true; raf = requestAnimationFrame(loop); } } };
+  })();
+  canvas.addEventListener("pointermove", (event) => {
+    particles.setPos?.(event.offsetX, event.offsetY);
+  });
 
   // Separadores entre as seções: um feixe de magia com hue iridescente.
   const dividerTemplate = `
@@ -345,6 +409,28 @@
   skip.addEventListener("click", () => {
     if (revealing) finish();
     else showReveal();
+  });
+
+  const disableParticles = () => {
+    offButton.setAttribute("aria-pressed", "true");
+    offButton.textContent = "Anim. desligadas";
+    particles.on = false;
+    particles.dispose?.();
+    canvas.style.display = "none";
+  };
+  offButton.addEventListener("click", () => {
+    if (offButton.textContent.startsWith("Desligar")) {
+      disableParticles();
+      document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "visible") particles.draw?.();
+      });
+    } else {
+      offButton.setAttribute("aria-pressed", "false");
+      offButton.textContent = "Desligar animações";
+      canvas.style.display = "block";
+      particles.on = true;
+      particles.resume?.();
+    }
   });
 
   document.body.style.overflow = "hidden";
