@@ -2,11 +2,17 @@
 
 Página única de convite: uma ideia sua, tecnologia pronta. O único objetivo é levar o visitante a enviar uma mensagem no WhatsApp.
 
+## Acesso
+
+**Site publicado:** https://vistanology.github.io/convite-para-voce-empreendedor/
+
+Hospedado no GitHub Pages, branch `main`, diretório `/` (root).
+
 ## Estrutura
 
 - `index.html` — loading (boot), animação do convite, seções compactas, 6 protótipos, sidebar com a aba **Pricing** e modais.
-- `styles.css` — estética aero/glass, boot escalável sem partículas, separadores em feixe hue, drawer de preços e modais.
-- `script.js` — sequência de carregamento, fundo animado, drawer de preços, escolha da mensagem, abertura/fechamento dos modais e escala dos iframes.
+- `styles.css` — estética aero/glass, boot sem sobreposição de controles, separadores com filete e medalhão, fundo noturno com partículas, drawer de preços e modais.
+- `script.js` — sequência de carregamento, partículas ambientais, separadores, drawer de preços, navegação, escolha da mensagem, abertura/fechamento dos modais e escala dos iframes.
 - `assets/` — imagens reaproveitadas do `our-site` e ícone.
 
 ## WhatsApp
@@ -63,7 +69,8 @@ python -m http.server 8000
 
 Depois abra `http://localhost:8000`.
 
-## Publicar
+## Publicar novamente
 
-GitHub Pages: **Settings → Pages → Deploy from a branch → main / root**.
+O GitHub Pages está configurado em **Settings → Pages → Deploy from a branch → main / root**. Basta enviar as alterações para `main`; o GitHub refaz o deploy automaticamente.
+
 URL: https://vistanology.github.io/convite-para-voce-empreendedor/

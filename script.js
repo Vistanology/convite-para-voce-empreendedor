@@ -40,136 +40,250 @@
   const tip = document.getElementById("boot-tip");
   const status = document.getElementById("boot-status");
   const canvas = document.getElementById("boot-particles");
+  const hero = document.querySelector(".hero");
+  const heroBg = document.querySelector(".hero-bg");
+  const heroMotes = document.querySelector(".hero-motes");
+  if (!reduceMotion && hero && heroBg && heroMotes) {
+    const frag = document.createDocumentFragment();
+    for (let index = 0; index < 14; index += 1) {
+      const mote = document.createElement("span");
+      const size = 2.2 + Math.random() * 3.5;
+      mote.className = "hero-mote";
+      mote.style.left = `${4 + Math.random() * 92}%`;
+      mote.style.top = `${12 + Math.random() * 78}%`;
+      mote.style.width = `${size}px`;
+      mote.style.height = `${size}px`;
+      mote.style.setProperty("--delay", `${Math.random() * 6}s`);
+      mote.style.setProperty("--duration", `${9 + Math.random() * 9}s`);
+      mote.style.setProperty("--drift", `${(Math.random() - .5) * 80}px`);
+      frag.appendChild(mote);
+    }
+    heroMotes.appendChild(frag);
+    hero.addEventListener("pointermove", (event) => {
+      const rect = hero.getBoundingClientRect();
+      const x = (event.clientX / rect.width - .5) * 2;
+      const y = (event.clientY / rect.height - .5) * 2;
+      heroBg.style.setProperty("--hero-x", `${x * -14}px`);
+      heroBg.style.setProperty("--hero-y", `${y * -9}px`);
+    });
+    hero.addEventListener("pointerleave", () => {
+      heroBg.style.setProperty("--hero-x", "0px");
+      heroBg.style.setProperty("--hero-y", "0px");
+    });
+  }
 
-  const particles = (() => {
-    if (reduceMotion || !canvas?.getContext) return { active: false, draw: () => {}, dispose: () => {}, paused: true };
+  const starField = (() => {
+    if (reduceMotion || !canvas?.getContext) return { active: false, draw: () => {}, dispose: () => {}, setPos: () => {}, pause: () => {}, resume: () => {} };
     const ctx = canvas.getContext("2d");
-    if (!ctx) return { active: false, draw: () => {}, dispose: () => {}, paused: true };
+    if (!ctx) return { active: false, draw: () => {}, dispose: () => {}, setPos: () => {}, pause: () => {}, resume: () => {} };
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const state = { x: 0, y: 0, offsetWidth: 0, offsetHeight: 0, raf: 0, last: 0, on: true };
-    let raf = 0;
-    let seed = Date.now();
+    const stars = [];
+    const state = { x: 0, y: 0, on: true, raf: 0, last: 0, size: 0, h: 0 };
+    let seed = Date.now() ^ (Math.random() * 65536);
     const random = () => {
       seed = (seed * 16807) % 2147483647;
       return (seed - 1) / 2147483646;
     };
-    const items = Array.from({ length: 0 }, () => null);
+    const palette = [
+      ["#7ff2ff", 0.5, "#11496160"],
+      ["#bf6aff", 0.35, "#3b298f60"],
+      ["#00e5ff", 0.45, "#0d4a5860"],
+      ["#ff9e4d", 0.25, "#6b332760"],
+      ["#ffd166", 0.30, "#6b4d2270"],
+      ["#7ef9a1", 0.28, "#2f5e4860"],
+    ];
+    const useGradient = (gradient) => {
+      gradient.addColorStop(0, palette[Math.floor(random() * palette.length)][2]);
+      gradient.addColorStop(1, palette[Math.floor(random() * palette.length)][0]);
+    };
 
-    const add = () => {
-      const width = Math.max(80, canvas.clientWidth || 0);
-      const height = Math.max(80, canvas.clientHeight || 0);
-      const count = Math.min(28, Math.max(8, Math.round((width * height) / 140000)));
-      for (let index = 0; index < count; index += 1) {
-        items.push({
-          x: random() * width,
-          y: -random() * 120,
-          z: 0.22 + random() * 0.9,
-          speed: 14 + random() * 22,
-          drift: (random() - .5) * 20,
-          bright: .35 + random() * .65,
+    const count = () => {
+      const total = Math.min(90, Math.max(24, Math.round((canvas.clientWidth * canvas.clientHeight) / 110000)));
+      return total;
+    };
+    const addStars = () => {
+      const total = count();
+      while (stars.length < total) {
+        stars.push({
+          x: random() * (canvas.clientWidth || 100),
+          y: random() * (canvas.clientHeight || 100),
+          size: random(),
+          speed: 0.5 + random() * 1.4,
+          drift: (random() - .5) * 1.5,
+          glow: random() * .8,
+          pulse: random() * Math.PI * 2,
         });
       }
     };
-    add();
+    addStars();
 
     const draw = () => {
-      const width = Math.max(80, canvas.clientWidth || 0);
-      const height = Math.max(80, canvas.clientHeight || 0);
-      if (state.offsetWidth !== width || state.offsetHeight !== height) {
-        state.offsetWidth = width;
-        state.offsetHeight = height;
-        canvas.width = Math.max(1, Math.round(width * dpr));
-        canvas.height = Math.max(1, Math.round(height * dpr));
-      }
+      state.size = canvas.clientWidth || 100;
+      state.h = canvas.clientHeight || 100;
+      if (canvas.width !== state.size * dpr) canvas.width = Math.max(1, Math.round(state.size * dpr));
+      if (canvas.height !== state.h * dpr) canvas.height = Math.max(1, Math.round(state.h * dpr));
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      ctx.clearRect(0, 0, width, height);
+      ctx.clearRect(0, 0, state.size, state.h);
       const now = performance.now();
-      const dt = Math.min(now - state.last, 80) / 1000;
+      const dt = Math.min(Math.max(now - state.last, 0) / 1000, .04);
       state.last = now;
-      const time = now * .0012;
-      items.forEach((item) => {
-        item.y += item.speed * dt;
-        item.x += item.drift + Math.sin(item.y * .002 + time) * 1.5;
-        const dx = item.x - state.x;
-        const dy = item.y - state.y;
-        const dist = Math.hypot(dx, dy);
-        const size = item.bright * (1.8 + item.z * 2.2) * Math.max(0, 1 - dist / 900);
-        if (size < .5) return;
-        const shift = Math.sin(time * 3 + dist * .02) * 16;
-        ctx.globalAlpha = Math.max(.1, size / 7);
-        const gradient = ctx.createRadialGradient(item.x + shift, item.y + shift, 0, item.x + shift, item.y + shift, size);
-        gradient.addColorStop(0, "#ffffff");
-        gradient.addColorStop(.5, "#7edbff");
-        gradient.addColorStop(1, "transparent");
+      const time = now * .0008;
+      const t = Math.sin(time) * .45;
+      while (stars.length < count()) stars.push({
+        x: random() * state.size,
+        y: -random() * Math.min(state.h * .45, 160),
+        size: random(),
+        speed: 0.5 + random() * 1.4,
+        drift: (random() - .5) * 1.5,
+        glow: random() * .8,
+        pulse: random() * Math.PI * 2,
+      });
+      stars.forEach((star) => {
+        star.y -= star.speed * dt * (20 + star.size * 12);
+        star.x += star.drift + Math.sin(star.y * .03 + time) * 0.8;
+        const bottom = state.h + (star.size * 6);
+        const edge = state.size * .12;
+        if (Math.random() < .12) {
+          ctx.globalAlpha = (0.07 + 0.15 * Math.sin(time * 5 + star.y * .015)) * star.size;
+          ctx.strokeStyle = "#8cf1ff";
+          ctx.lineWidth = 1.2 * star.size;
+          ctx.beginPath();
+          ctx.moveTo(star.x, star.y - Math.min(state.h * .55, 170));
+          ctx.lineTo(star.x + (star.drift * 45), star.y);
+          ctx.lineTo(star.x, star.y + Math.min(state.h * .15, 40));
+          ctx.stroke();
+        }
+        if (star.y > bottom + edge) {
+          star.y = -random() * Math.min(state.h * .35, 140);
+          star.x = random() * state.size + (t * state.size * 0.1);
+        }
+        if (star.x < -edge) star.x += state.size + edge * 2;
+        if (star.x > state.size + edge) star.x -= state.size + edge * 2;
+        const [outer, bright, inner] = palette[Math.floor(random() * palette.length)] || palette[0];
+        const radius = star.size * 1.1;
+        const pulse = .65 + .35 * Math.sin(star.pulse + star.y * .012 + time);
+        const opacity = (0.10 + 0.10 * Math.sin(star.pulse + star.y * .01 + time)) * pulse;
+        const gradient = ctx.createRadialGradient(star.x, star.y, 0, star.x, star.y, radius);
+        gradient.addColorStop(0, outer);
+        gradient.addColorStop(String(0.42), bright);
+        gradient.addColorStop(String(1), inner);
+        if (star.size > 0.9) {
+          const stopOffset = Math.max(0.02, Math.min(.98, 0.28 + Math.sin(star.pulse + star.y * .02 + time) * .12));
+          gradient.addColorStop(Math.max(0.01, stopOffset - 0.18), "transparent");
+          gradient.addColorStop(stopOffset, "#ffffffc8");
+          gradient.addColorStop(Math.min(0.98, stopOffset + 0.18), "transparent");
+        }
+        ctx.globalAlpha = opacity;
         ctx.fillStyle = gradient;
         ctx.beginPath();
-        ctx.arc(item.x + shift, item.y + shift, size, 0, Math.PI * 2);
+        ctx.arc(star.x, star.y, radius, 0, Math.PI * 2);
         ctx.fill();
-        if (dist < 180) {
-          const alpha = Math.max(0, 1 - dist / 180);
-          ctx.globalAlpha = alpha * .22;
+        if (star.size > 0.72) {
+          ctx.globalAlpha = opacity * .16;
+          ctx.strokeStyle = outer;
+          ctx.lineWidth = star.size * .12;
           ctx.beginPath();
-          ctx.moveTo(item.x, item.y);
-          ctx.lineTo(state.x, state.y);
-          ctx.strokeStyle = "#4ee0ff";
-          ctx.lineWidth = .7;
+          ctx.arc(star.x, star.y, radius * 1.6, 0, Math.PI * 2);
           ctx.stroke();
         }
       });
-      for (let index = items.length - 1; index >= 0; index -= 1) {
-        if (items[index].y > height + 40) items.splice(index, 1);
-      }
-      if (items.length < Math.min(28, Math.max(8, Math.round((state.offsetWidth * state.offsetHeight) / 140000)))) add();
     };
-
     const loop = () => {
       if (!state.on || !canvas.isConnected) return;
       if (document.visibilityState === "visible") draw();
-      state.on && (raf = requestAnimationFrame(loop));
+      state.on && (state.raf = requestAnimationFrame(loop));
     };
-    raf = requestAnimationFrame(loop);
-    const dispose = () => {
-      state.on = false;
-      cancelAnimationFrame(raf);
-    };
-    return { active: true, draw, dispose, setPos: (x, y) => { state.x = x; state.y = y; }, pause: dispose, resume: () => { if (state.on !== true) { state.on = true; raf = requestAnimationFrame(loop); } } };
+    state.raf = requestAnimationFrame(loop);
+    const dispose = () => { state.on = false; cancelAnimationFrame(state.raf); };
+    return { active: true, draw, dispose, setPos: (x, y) => { state.x = x; state.y = y; }, pause: dispose, resume: () => { if (state.on !== true) { state.on = true; state.raf = requestAnimationFrame(loop); } } };
   })();
   canvas.addEventListener("pointermove", (event) => {
-    particles.setPos?.(event.offsetX, event.offsetY);
+    starField.setPos?.(event.offsetX, event.offsetY);
   });
+  const particles = starField;
 
-  // Separadores entre as seções: um feixe de magia com hue iridescente.
+  // Separadores entre as seções: filete fino com medalhão de vidro.
   const dividerTemplate = `
-    <div class="hue-divider">
-      <span class="hue-beam hue-beam-a" aria-hidden="true"></span>
-      <span class="hue-beam hue-beam-b" aria-hidden="true"></span>
-      <span class="hue-beam hue-beam-c" aria-hidden="true"></span>
-      <span class="hue-rays" aria-hidden="true"></span>
-      <button type="button" class="hue-core" data-story-open aria-haspopup="dialog" aria-expanded="false" aria-label="Conhecer a história da Vistanology"><svg class="glass-emblem" aria-hidden="true"><use href="#vista-emblem" /></svg></button>
-      <span class="hue-sparks" data-hue-sparks aria-hidden="true"></span>
-      <span class="hue-word" aria-hidden="true">TOQUE NO EMBLEMA · CONHEÇA A HISTÓRIA</span>
+    <div class="sepa">
+      <span class="sepa-rule" aria-hidden="true"><span class="sepa-glint"></span></span>
+      <span class="sepa-dot sepa-dot--a" aria-hidden="true"></span>
+      <span class="sepa-dot sepa-dot--b" aria-hidden="true"></span>
+      <button type="button" class="sepa-seal" data-story-open aria-haspopup="dialog" aria-expanded="false" aria-label="Conhecer a história da Vistanology"><svg class="glass-emblem" aria-hidden="true"><use href="#vista-emblem" /></svg></button>
+      <span class="sepa-caption" aria-hidden="true">Conheça a história</span>
     </div>`;
   const siteSections = Array.from(document.querySelectorAll(".site > section"));
   siteSections.slice(1).forEach((section) => section.insertAdjacentHTML("beforebegin", dividerTemplate));
-  document.querySelectorAll("[data-hue-sparks]").forEach((container) => {
-    if (reduceMotion) return;
-    const frag = document.createDocumentFragment();
-    for (let index = 0; index < 18; index += 1) {
-      const spark = document.createElement("span");
-      const size = 2 + Math.random() * 3;
-      spark.className = "hue-spark";
-      spark.style.left = `${3 + Math.random() * 94}%`;
-      spark.style.top = `${28 + Math.random() * 52}%`;
-      spark.style.width = `${size}px`;
-      spark.style.height = `${size}px`;
-      spark.style.setProperty("--hue", String(Math.floor(Math.random() * 360)));
-      spark.style.setProperty("--delay", `${Math.random() * 5}s`);
-      spark.style.setProperty("--duration", `${4 + Math.random() * 5}s`);
-      spark.style.setProperty("--drift", `${(Math.random() - .5) * 90}px`);
-      frag.appendChild(spark);
+
+  // Poeira ambiente: partículas lentas sobre o gradiente do fundo.
+  const dustCanvas = document.querySelector(".ambience-dust");
+  if (dustCanvas?.getContext) {
+    const dctx = dustCanvas.getContext("2d");
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const motes = [];
+    const dust = { on: !reduceMotion, raf: 0, x: 0, y: 0, tx: 0, ty: 0, last: 0 };
+    const fill = () => {
+      const total = Math.min(120, Math.max(36, Math.round(window.innerWidth * window.innerHeight / 16000)));
+      while (motes.length < total) motes.push({
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        r: .4 + Math.random() * 1.5,
+        vy: -(2 + Math.random() * 7),
+        sway: Math.random() * Math.PI * 2,
+        swaySpeed: .2 + Math.random() * .5,
+        depth: .25 + Math.random() * .75,
+        alpha: .12 + Math.random() * .3,
+        warm: Math.random() < .18,
+      });
+      motes.length = total;
+    };
+    const drawDust = () => {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      if (dustCanvas.width !== Math.round(w * dpr)) dustCanvas.width = Math.round(w * dpr);
+      if (dustCanvas.height !== Math.round(h * dpr)) dustCanvas.height = Math.round(h * dpr);
+      dctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      dctx.clearRect(0, 0, w, h);
+      const now = performance.now();
+      const dt = Math.min((now - (dust.last || now)) / 1000, .05);
+      dust.last = now;
+      dust.x += (dust.tx - dust.x) * .04;
+      dust.y += (dust.ty - dust.y) * .04;
+      const time = now * .001;
+      motes.forEach((m) => {
+        m.y += m.vy * dt;
+        m.sway += m.swaySpeed * dt;
+        if (m.y < -10) { m.y = h + 10; m.x = Math.random() * w; }
+        const px = m.x + Math.sin(m.sway) * 14 + dust.x * m.depth * 26;
+        const py = m.y + Math.cos(m.sway * .7) * 6 + dust.y * m.depth * 18;
+        const twinkle = .7 + .3 * Math.sin(time * (1 + m.depth) + m.sway * 3);
+        dctx.globalAlpha = m.alpha * twinkle * m.depth;
+        dctx.fillStyle = m.warm ? "#ffe9c2" : "#cdefff";
+        dctx.beginPath();
+        dctx.arc(px, py, m.r * m.depth + .3, 0, Math.PI * 2);
+        dctx.fill();
+      });
+      dctx.globalAlpha = 1;
+    };
+    const dustLoop = () => {
+      if (!dust.on || document.visibilityState !== "visible") { dust.raf = 0; return; }
+      drawDust();
+      dust.raf = requestAnimationFrame(dustLoop);
+    };
+    fill();
+    if (dust.on) {
+      dust.raf = requestAnimationFrame(dustLoop);
+      window.addEventListener("pointermove", (e) => {
+        dust.tx = (e.clientX / window.innerWidth - .5) * 2;
+        dust.ty = (e.clientY / window.innerHeight - .5) * 2;
+      }, { passive: true });
+      window.addEventListener("resize", fill);
+      document.addEventListener("visibilitychange", () => {
+        if (dust.on && !dust.raf && document.visibilityState === "visible") dust.raf = requestAnimationFrame(dustLoop);
+      });
+    } else {
+      drawDust();
     }
-    container.appendChild(frag);
-  });
+  }
 
   // Valores: páginas começam em R$ 100/mês; sistemas em R$ 500/mês.
   // Anual à vista equivale a 10 mensalidades — 12 meses com 2 grátis.
@@ -231,6 +345,54 @@
       if (restoreFocus) pricingOpen.focus({ preventScroll: true });
     }, delayed(400));
   }
+
+  const navbar = document.getElementById("navbar");
+  const navToggle = document.getElementById("nav-toggle");
+  const navDrawer = document.getElementById("nav-drawer");
+  const navDrawerSheet = navDrawer.querySelector(".nav-drawer-sheet");
+  const navDrawerOverflow = () => {
+    const previous = document.body.style.overflow;
+    return () => { document.body.style.overflow = previous; };
+  };
+  const restoreNavOverflow = navDrawerOverflow();
+
+  function openNav(focusDrawer = false) {
+    if (!navDrawer.hasAttribute("hidden") || !document.getElementById("chat-modal").hidden || !storyModal.hidden || !pricingPanel.hidden) return;
+    document.body.style.overflow = "hidden";
+    navDrawer.removeAttribute("hidden");
+    navToggle.setAttribute("aria-expanded", "true");
+    navDrawerSheet.classList.add("is-open");
+    if (focusDrawer) setTimeout(() => navDrawerSheet.querySelector("a, button")?.focus({ preventScroll: true }), delayed(420));
+  }
+
+  function closeNav() {
+    if (navDrawer.hasAttribute("hidden")) return;
+    navDrawer.classList.remove("is-open");
+    navDrawerSheet.classList.remove("is-open");
+    setTimeout(() => {
+      navDrawer.setAttribute("hidden", "");
+      navToggle.setAttribute("aria-expanded", "false");
+      restoreNavOverflow();
+    }, delayed(320));
+  }
+
+  navToggle.addEventListener("click", () => openNav(true));
+  navDrawer.querySelectorAll(".nav-drawer-backdrop").forEach((element) => element.addEventListener("click", closeNav));
+  navDrawer.querySelectorAll("a, .nav-drawer-cta").forEach((element) => element.addEventListener("click", () => {
+    setTimeout(closeNav, delayed(80));
+  }));
+  navDrawer.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !navDrawer.hasAttribute("hidden")) {
+      event.preventDefault();
+      closeNav();
+    }
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !navDrawer.hasAttribute("hidden")) {
+      event.preventDefault();
+      closeNav();
+    }
+  });
 
   pricingOpen.addEventListener("click", openPricing);
   pricingPanel.querySelectorAll("[data-pricing-close]").forEach((element) => {
@@ -394,6 +556,7 @@
       const title = document.getElementById("hero-title");
       title.setAttribute("tabindex", "-1");
       title.focus({ preventScroll: true });
+      navToggle.focus({ preventScroll: true });
     }, delayed(760));
   }
 
@@ -429,6 +592,7 @@
       offButton.textContent = "Desligar animações";
       canvas.style.display = "block";
       particles.on = true;
+      particles.draw?.();
       particles.resume?.();
     }
   });
@@ -720,7 +884,7 @@
   }
 
   function openChat(trigger, preset) {
-    if (!chatModal.hidden || !modal.hidden || !storyModal.hidden || !pricingPanel.hidden) return;
+    if (!chatModal.hidden || !modal.hidden || !storyModal.hidden || !pricingPanel.hidden || !navDrawer.hasAttribute("hidden")) return;
     clearTimeout(chatCloseTimer);
     chatOpener = trigger;
     chatOverflow = document.body.style.overflow;
