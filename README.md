@@ -21,7 +21,7 @@ const INVITE_MESSAGE = "…";
 
 ## Protótipos
 
-Antes de cada abertura, aparece uma transição mágica com a arte do perfil GitHub da Vistanology (`assets/vistanology-avatar.png`), órbitas, faíscas e o cosmos do `our-site`, envolvendo o site até o modal entrar. Cada janela abre um modal com navegador integrado (iframe), com escala automática para caber no monitor sem cortar o conteúdo e fundo contínuo, sem borda branca. Há também link para abrir em nova aba.
+Cada janela abre direto em um modal com navegador integrado (iframe). Dentro dele, o loading usa a arte do perfil GitHub da Vistanology (`assets/vistanology-avatar.png`), órbitas, faíscas e o cosmos do `our-site`; quando a página termina de carregar, a arte dissolve e o site aparece na mesma moldura — sem etapa separada. O iframe tem escala automática para caber no monitor sem cortar o conteúdo e fundo contínuo, sem borda branca. Há também link para abrir em nova aba.
 
 Páginas vinculadas (GitHub Pages):
 

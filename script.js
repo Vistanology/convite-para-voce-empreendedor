@@ -176,14 +176,14 @@
   const modalUrl = document.getElementById("modal-url");
   const modalExternal = document.getElementById("modal-external");
   const modalClose = document.getElementById("modal-close");
-  const magic = document.getElementById("magic-transition");
-  const magicTitle = document.getElementById("magic-title");
+  const magicLoadingTitle = document.getElementById("modal-loading-title");
   const magicSparks = document.getElementById("magic-sparks");
 
   let opener = null;
   let previousOverflow = "";
   let closeTimer = 0;
-  let magicTimer = 0;
+  let loadTimer = 0;
+  let loadStart = 0;
 
   // Cada protótipo é renderizado em 1440x900 e escalado para caber no monitor inteiro.
   const FIT_WIDTH = 1440;
@@ -200,13 +200,18 @@
   }
 
   iframe.addEventListener("load", () => {
-    viewport.classList.add("is-loaded");
-    fitIframe();
-    if (!modal.hidden) modalClose.focus({ preventScroll: true });
+    clearTimeout(loadTimer);
+    const wait = Math.max(0, 750 - (Date.now() - loadStart));
+    loadTimer = setTimeout(() => {
+      if (modal.hidden) return;
+      viewport.classList.add("is-loaded");
+      fitIframe();
+      modalClose.focus({ preventScroll: true });
+    }, wait);
   });
   window.addEventListener("resize", fitIframe);
 
-  // A arte do perfil Vistanology aparece e envolve o site antes de cada abertura.
+  // O loading mágico acontece dentro do próprio modal, sem etapa separada.
   function buildSparks() {
     magicSparks.replaceChildren();
     if (reduceMotion) return;
@@ -223,41 +228,22 @@
     }
   }
 
-  function runMagic(button, launch) {
-    if (reduceMotion) {
-      launch();
-      return;
-    }
-    clearTimeout(magicTimer);
-    magicTitle.textContent = button.dataset.title || "Protótipo";
-    magic.hidden = false;
-    magic.classList.remove("is-leaving");
-    magic.removeAttribute("aria-hidden");
-    document.body.style.overflow = "hidden";
-    buildSparks();
-    requestAnimationFrame(() => magic.classList.add("is-open"));
-    magicTimer = setTimeout(() => {
-      magic.classList.add("is-leaving");
-      magicTimer = setTimeout(() => {
-        magic.hidden = true;
-        magic.classList.remove("is-open", "is-leaving");
-        magic.setAttribute("aria-hidden", "true");
-        launch();
-      }, 420);
-    }, 1050);
-  }
-
   function showModal(button) {
-    modalTitle.textContent = button.dataset.title || "Protótipo";
+    clearTimeout(loadTimer);
+    const title = button.dataset.title || "Protótipo";
+    modalTitle.textContent = title;
+    magicLoadingTitle.textContent = title;
     modalOwner.textContent = button.dataset.owner || "Vistanology";
     modalUrl.textContent = button.dataset.url || "";
     modalExternal.href = button.dataset.url || "#";
     viewport.classList.remove("is-loaded");
+    buildSparks();
     iframe.removeAttribute("src");
-    iframe.title = `Prévia ao vivo: ${modalTitle.textContent}`;
+    iframe.title = `Prévia ao vivo: ${title}`;
     modal.hidden = false;
     modal.classList.remove("is-closing");
     document.body.style.overflow = "hidden";
+    loadStart = Date.now();
     requestAnimationFrame(() => {
       modal.classList.add("is-open");
       fitIframe();
@@ -267,16 +253,17 @@
   }
 
   function openPrototype(button) {
-    if (!modal.hidden || !magic.hidden) return;
+    if (!modal.hidden) return;
     clearTimeout(closeTimer);
     opener = button;
     previousOverflow = document.body.style.overflow;
-    runMagic(button, () => showModal(button));
+    showModal(button);
   }
 
   function closeModal() {
     if (modal.hidden) return;
     clearTimeout(closeTimer);
+    clearTimeout(loadTimer);
     modal.classList.remove("is-open");
     modal.classList.add("is-closing");
     document.body.style.overflow = previousOverflow;

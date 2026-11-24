@@ -201,23 +201,6 @@
     </footer>
   </main>
 
-  <!-- Transição mágica: a arte do perfil Vistanology envolve o site antes do modal -->
-  <div class="magic-transition" id="magic-transition" hidden aria-hidden="true">
-    <div class="magic-cosmos" aria-hidden="true"></div>
-    <div class="magic-orbit" aria-hidden="true"><span></span><span></span><span></span></div>
-    <div class="magic-core">
-      <span class="magic-glow" aria-hidden="true"></span>
-      <span class="magic-avatar"><img src="assets/vistanology-avatar.png" alt="" /></span>
-      <span class="magic-rune" aria-hidden="true"><svg class="glass-emblem"><use href="#vista-emblem" /></svg></span>
-    </div>
-    <div class="magic-copy">
-      <span>VISTANOLOGY · MAGIA APLICADA</span>
-      <strong id="magic-title">Protótipo</strong>
-      <small>Envolvendo o site com magia…</small>
-    </div>
-    <div class="magic-sparks" id="magic-sparks" aria-hidden="true"></div>
-  </div>
-
   <!-- Navegador integrado: abre os protótipos sem sair do convite -->
   <div class="browser-modal" id="browser-modal" hidden role="dialog" aria-modal="true" aria-labelledby="modal-title">
     <div class="modal-backdrop" data-close></div>
@@ -233,7 +216,22 @@
         <a id="modal-external" href="#" target="_blank" rel="noopener noreferrer">Abrir em nova aba ↗</a>
       </div>
       <div class="browser-viewport">
-        <div class="browser-loading" id="modal-loading"><span class="browser-spinner" aria-hidden="true"></span><span>Abrindo experiência ao vivo…</span></div>
+        <div class="magic-loading" id="modal-loading" aria-hidden="true">
+          <div class="magic-cosmos"></div>
+          <div class="magic-orbit"><span></span><span></span><span></span></div>
+          <div class="magic-core">
+            <span class="magic-glow"></span>
+            <span class="magic-avatar"><img src="assets/vistanology-avatar.png" alt="" /></span>
+            <span class="magic-rune"><svg class="glass-emblem"><use href="#vista-emblem" /></svg></span>
+          </div>
+          <div class="magic-copy">
+            <span>VISTANOLOGY · MAGIA APLICADA</span>
+            <strong id="modal-loading-title">Protótipo</strong>
+            <small>Envolvendo o site com magia…</small>
+          </div>
+          <span class="browser-spinner"></span>
+          <div class="magic-sparks" id="magic-sparks"></div>
+        </div>
         <iframe id="modal-frame" title="Prévia ao vivo do protótipo" referrerpolicy="no-referrer"></iframe>
       </div>
       <div class="browser-foot"><span>Prévia integrada · Vistanology</span><span>Não carregou? Use “Abrir em nova aba”.</span></div>
