@@ -17,10 +17,11 @@
   document.getElementById("year").textContent = String(new Date().getFullYear());
 
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const delayed = (ms) => (reduceMotion ? 0 : ms);
   const boot = document.getElementById("boot");
   const site = document.getElementById("conteudo");
   const stage = document.getElementById("boot-stage");
-  const reveal = document.getElementById("boot-reveal");
+  const reveal = document.getElementById("reveal");
   const skip = document.getElementById("boot-skip");
   const bar = document.getElementById("boot-bar");
   const fill = document.getElementById("boot-fill");
@@ -28,6 +29,7 @@
   const status = document.getElementById("boot-status");
   const bloom = document.getElementById("boot-bloom");
   const particles = document.getElementById("boot-particles");
+  const frame = document.querySelector(".boot-bg-frame");
 
   // Partículas do mesmo vocabulário visual do our-site.
   const motes = [
@@ -60,7 +62,7 @@
       const rect = boot.getBoundingClientRect();
       const x = (event.clientX / rect.width - .5) * 2;
       const y = (event.clientY / rect.height - .5) * 2;
-      document.querySelector(".boot-bg-frame").style.transform = `translate3d(${x * -12}px, ${y * -8}px, 0)`;
+      frame.style.transform = `translate3d(${x * -12}px, ${y * -8}px, 0)`;
       bloom.style.transform = `translate3d(${x * 16}px, ${y * 10}px, 0)`;
     });
   }
@@ -69,7 +71,7 @@
   const nextFrame = () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
   const waitForIdle = () => new Promise((resolve) => {
     if ("requestIdleCallback" in window) requestIdleCallback(() => resolve());
-    else setTimeout(resolve, 120);
+    else setTimeout(resolve, 100);
   });
   const decodeBackground = (src) => {
     const image = new Image();
@@ -78,16 +80,14 @@
   };
 
   const steps = [
-    { label: "Preparando seu convite…", weight: .42, minMs: 950, run: () => decodeBackground("assets/aero-horizon.webp") },
-    { label: "Abrindo o universo Vistanology…", weight: .22, minMs: 700, run: () => document.fonts?.ready.then(() => undefined) ?? Promise.resolve() },
-    { label: "Ajustando os detalhes…", weight: .18, minMs: 700, run: () => nextFrame() },
-    { label: "Sincronizando o convite…", weight: .18, minMs: 700, run: () => waitForIdle() },
+    { label: "Preparando seu convite…", weight: .42, minMs: 620, run: () => decodeBackground("assets/aero-horizon.webp") },
+    { label: "Abrindo o universo Vistanology…", weight: .22, minMs: 460, run: () => document.fonts?.ready.then(() => undefined) ?? Promise.resolve() },
+    { label: "Selando o convite…", weight: .18, minMs: 420, run: () => nextFrame() },
+    { label: "Tudo pronto para você.", weight: .18, minMs: 420, run: () => waitForIdle() },
   ];
-  const READY_MESSAGE = "Seu convite está pronto.";
-  const delayed = (ms) => (reduceMotion ? 0 : ms);
 
   let finished = false;
-  let stepIndex = 0;
+  let revealing = false;
 
   function paintProgress(value) {
     const percent = Math.max(value * 100, 4);
@@ -96,53 +96,74 @@
     bar.setAttribute("aria-valuenow", String(Math.round(percent)));
   }
 
+  function observeReveals() {
+    const items = document.querySelectorAll(".reveal");
+    if (!("IntersectionObserver" in window) || reduceMotion) {
+      items.forEach((item) => item.classList.add("in"));
+      return;
+    }
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("in");
+        observer.unobserve(entry.target);
+      });
+    }, { threshold: .15, rootMargin: "0px 0px -8% 0px" });
+    items.forEach((item) => observer.observe(item));
+  }
+
   function finish() {
     if (finished) return;
     finished = true;
-    status.textContent = READY_MESSAGE;
     paintProgress(1);
+    status.textContent = "Tudo pronto para você.";
     boot.classList.add("is-leaving");
+    reveal.classList.add("is-leaving");
     site.classList.add("is-visible");
     site.removeAttribute("aria-hidden");
     document.body.style.overflow = "";
     window.scrollTo(0, 0);
+    observeReveals();
     setTimeout(() => {
       boot.hidden = true;
-      document.getElementById("hero-title").setAttribute("tabindex", "-1");
-      document.getElementById("hero-title").focus({ preventScroll: true });
-    }, delayed(800));
+      reveal.hidden = true;
+      const title = document.getElementById("hero-title");
+      title.setAttribute("tabindex", "-1");
+      title.focus({ preventScroll: true });
+    }, delayed(760));
   }
 
   function showReveal() {
+    if (finished || revealing) return;
+    revealing = true;
     stage.hidden = true;
     reveal.hidden = false;
-    setTimeout(finish, delayed(1700));
+    reveal.removeAttribute("aria-hidden");
+    setTimeout(finish, delayed(2500));
   }
 
-  skip.addEventListener("click", finish);
+  skip.addEventListener("click", () => {
+    if (revealing) finish();
+    else showReveal();
+  });
 
-  const previousOverflow = document.body.style.overflow;
   document.body.style.overflow = "hidden";
 
   (async () => {
     let cumulative = 0;
     for (const step of steps) {
       status.textContent = step.label;
-      if (finished) return;
       await Promise.all([
         Promise.race([step.run(), sleep(5000)]),
         sleep(delayed(step.minMs)),
       ]);
-      if (finished) return;
+      if (finished || revealing) return;
       cumulative += step.weight;
       paintProgress(cumulative);
-      stepIndex += 1;
     }
-    if (finished) return;
+    if (finished || revealing) return;
     paintProgress(1);
-    status.textContent = READY_MESSAGE;
-    setTimeout(showReveal, delayed(1000));
+    status.textContent = "Tudo pronto para você.";
+    setTimeout(showReveal, delayed(650));
   })();
-
-  window.addEventListener("pagehide", () => { document.body.style.overflow = previousOverflow; }, { once: true });
 })();
