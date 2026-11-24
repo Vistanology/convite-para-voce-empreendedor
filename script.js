@@ -75,6 +75,128 @@
     });
   }
 
+  // Separadores cósmicos entre as seções: órbitas, brilho e marcas da casa.
+  const dividerTemplate = `
+    <div class="cosmos-divider" aria-hidden="true">
+      <span class="divider-glow"></span>
+      <span class="divider-orbit"><i></i><i></i><i></i></span>
+      <span class="divider-line line-left"></span>
+      <span class="divider-core"><svg class="glass-emblem"><use href="#vista-emblem" /></svg></span>
+      <span class="divider-line line-right"></span>
+      <span class="divider-marquee">VISTANOLOGY ✦ TECNOLOGIA PRONTA ✦ UM FUTURO MAIS BONITO ✦ VISTANOLOGY ✦ TECNOLOGIA PRONTA ✦ UM FUTURO MAIS BONITO ✦</span>
+      <span class="divider-word">VISTANOLOGY · UM FUTURO MAIS BONITO</span>
+      <span class="divider-motes" data-divider-motes></span>
+    </div>`;
+  const siteSections = Array.from(document.querySelectorAll(".site > section"));
+  siteSections.slice(1).forEach((section) => section.insertAdjacentHTML("beforebegin", dividerTemplate));
+  document.querySelectorAll("[data-divider-motes]").forEach((container) => {
+    if (reduceMotion) return;
+    const frag = document.createDocumentFragment();
+    for (let index = 0; index < 14; index += 1) {
+      const mote = document.createElement("span");
+      const size = 2 + Math.random() * 3;
+      mote.className = "divider-mote";
+      mote.style.left = `${3 + Math.random() * 94}%`;
+      mote.style.top = `${25 + Math.random() * 55}%`;
+      mote.style.width = `${size}px`;
+      mote.style.height = `${size}px`;
+      mote.style.setProperty("--delay", `${Math.random() * 5}s`);
+      mote.style.setProperty("--duration", `${6 + Math.random() * 6}s`);
+      mote.style.setProperty("--drift", `${(Math.random() - .5) * 80}px`);
+      frag.appendChild(mote);
+    }
+    container.appendChild(frag);
+  });
+
+  // Valores: páginas começam em R$ 200/mês; sistemas em R$ 500/mês.
+  // Anual à vista equivale a 10 mensalidades — 12 meses com 2 grátis.
+  const brl = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 });
+  const PRICE_PLANS = {
+    page: [
+      { name: "Essencial", min: 200, max: 500, note: "Uma página focada em transformar visita em contato." },
+      { name: "Profissional", min: 600, max: 900, note: "Mais páginas, identidade e integrações com o seu fluxo." },
+      { name: "Premium", min: 1200, max: 1500, note: "Experiência completa, conteúdo e acompanhamento." },
+    ],
+    system: [
+      { name: "Essencial", min: 500, max: 900, note: "Sistemas começam em R$ 500/mês: painel e fluxos essenciais." },
+      { name: "Profissional", min: 1200, max: 1500, note: "Automações, integrações e área de usuário." },
+      { name: "Sob medida", min: 1500, max: null, note: "Escopo maior, evolução contínua e suporte dedicado." },
+    ],
+  };
+
+  function priceRange(plan, billing) {
+    const factor = billing === "annual" ? 10 : 1;
+    const min = brl.format(plan.min * factor);
+    if (!plan.max) return `A partir de ${min}`;
+    return `${min} – ${brl.format(plan.max * factor)}`;
+  }
+  function pricePeriod(billing) {
+    return billing === "annual" ? "12 meses à vista · 2 grátis" : "por mês";
+  }
+  function goalForKind(kind) {
+    return kind === "system" ? "Um sistema" : "Uma landing page";
+  }
+
+  const priceGrid = document.getElementById("price-grid");
+  let sitePriceKind = "page";
+  let siteBilling = "monthly";
+
+  function renderPrices() {
+    priceGrid.replaceChildren();
+    PRICE_PLANS[sitePriceKind].forEach((plan, index) => {
+      const card = document.createElement("button");
+      card.type = "button";
+      card.className = "price-card reveal in";
+      card.dataset.priceCard = "";
+      card.dataset.kind = sitePriceKind;
+      card.dataset.tier = String(index);
+      card.dataset.billing = siteBilling;
+      card.setAttribute("aria-label", `${plan.name}: ${priceRange(plan, siteBilling)}, ${pricePeriod(siteBilling)}. Quero este.`);
+      card.innerHTML = `
+        <span class="price-index">0${index + 1}</span>
+        <span class="price-name">${plan.name}</span>
+        <strong class="price-value">${priceRange(plan, siteBilling)}</strong>
+        <span class="price-period">${pricePeriod(siteBilling)}</span>
+        <span class="price-note-card">${plan.note}</span>
+        <span class="price-cta">QUERO ESTE →</span>`;
+      priceGrid.appendChild(card);
+    });
+  }
+
+  document.querySelectorAll("[data-price-kind]").forEach((button) => {
+    button.addEventListener("click", () => {
+      sitePriceKind = button.dataset.priceKind;
+      document.querySelectorAll("[data-price-kind]").forEach((tab) => {
+        const active = tab === button;
+        tab.classList.toggle("is-active", active);
+        tab.setAttribute("aria-pressed", String(active));
+      });
+      renderPrices();
+    });
+  });
+  document.querySelectorAll("[data-site-billing]").forEach((button) => {
+    button.addEventListener("click", () => {
+      siteBilling = button.dataset.siteBilling;
+      document.querySelectorAll("[data-site-billing]").forEach((tab) => {
+        const active = tab === button;
+        tab.classList.toggle("is-active", active);
+        tab.setAttribute("aria-pressed", String(active));
+      });
+      renderPrices();
+    });
+  });
+  priceGrid.addEventListener("click", (event) => {
+    const card = event.target.closest("[data-price-card]");
+    if (!card) return;
+    const plan = PRICE_PLANS[card.dataset.kind][Number(card.dataset.tier)];
+    openChat(document.querySelector("[data-chat-open]"), {
+      goal: goalForKind(card.dataset.kind),
+      billing: card.dataset.billing,
+      budget: priceRange(plan, card.dataset.billing),
+    });
+  });
+  renderPrices();
+
   // Partículas do mesmo vocabulário visual do our-site.
   const motes = [
     [7, 46, 3, .4, 8.2, 26], [14, 58, 2, 2.6, 10, -18], [22, 36, 4, 1.2, 9.4, 22],
@@ -352,20 +474,64 @@
   let chatOpener = null;
   let chatOverflow = "";
   let chatCloseTimer = 0;
+  let formBilling = "monthly";
 
-  function openChat(trigger) {
+  function fieldValue(id) {
+    return document.getElementById(id).value.trim();
+  }
+
+  function planKindForGoal() {
+    return /sistema/i.test(fieldValue("chat-goal")) ? "system" : "page";
+  }
+
+  function syncBudgetOptions(preferred, keepIndex) {
+    const budget = document.getElementById("chat-budget");
+    const previousIndex = budget.selectedIndex;
+    const previous = preferred || budget.value;
+    budget.replaceChildren();
+    PRICE_PLANS[planKindForGoal()].forEach((plan) => {
+      const option = document.createElement("option");
+      option.value = priceRange(plan, formBilling);
+      option.textContent = `${option.value} · ${pricePeriod(formBilling)}`;
+      budget.appendChild(option);
+    });
+    if (preferred) budget.value = preferred;
+    else if (keepIndex) budget.selectedIndex = Math.min(previousIndex, budget.options.length - 1);
+    else if (Array.from(budget.options).some((option) => option.value === previous)) budget.value = previous;
+  }
+
+  function setFormBilling(value) {
+    formBilling = value;
+    document.querySelectorAll("[data-form-billing]").forEach((button) => {
+      const active = button.dataset.formBilling === value;
+      button.classList.toggle("is-active", active);
+      button.setAttribute("aria-pressed", String(active));
+    });
+    syncBudgetOptions(null, true);
+  }
+
+  function openChat(trigger, preset) {
     if (!chatModal.hidden || !modal.hidden) return;
     clearTimeout(chatCloseTimer);
     chatOpener = trigger;
     chatOverflow = document.body.style.overflow;
-    chatOptions.hidden = false;
-    chatForm.hidden = true;
+    if (preset) {
+      document.getElementById("chat-goal").value = preset.goal;
+      setFormBilling(preset.billing);
+      syncBudgetOptions(preset.budget);
+      chatOptions.hidden = true;
+      chatForm.hidden = false;
+    } else {
+      chatOptions.hidden = false;
+      chatForm.hidden = true;
+    }
     chatModal.hidden = false;
     document.body.style.overflow = "hidden";
     trigger.setAttribute("aria-expanded", "true");
     requestAnimationFrame(() => {
       chatModal.classList.add("is-open");
-      chatOptions.querySelector("button").focus({ preventScroll: true });
+      const firstFocus = preset ? chatForm.querySelector("input") : chatOptions.querySelector("button");
+      firstFocus.focus({ preventScroll: true });
     });
   }
 
@@ -381,18 +547,15 @@
     }, delayed(320));
   }
 
-  function fieldValue(id) {
-    return document.getElementById(id).value.trim();
-  }
-
   function buildDetailedMessage() {
     const details = [
       ["Como te chamar", fieldValue("chat-name")],
       ["Negócio/projeto", fieldValue("chat-business")],
       ["O que quero criar", fieldValue("chat-goal")],
+      ["Como prefere pagar", formBilling === "annual" ? "Anual à vista (12 meses, 2 meses grátis)" : "Mensal"],
       ["Prazo", fieldValue("chat-deadline")],
       ["O que precisa resolver", fieldValue("chat-detail")],
-      ["Investimento", fieldValue("chat-budget")],
+      ["Faixa escolhida", fieldValue("chat-budget")],
     ].filter(([, value]) => value);
     const lines = [
       "Olá, Vista! Vim pelo convite da Vistanology e quero adiantar algumas informações para você se organizar:",
@@ -426,6 +589,11 @@
     chatOptions.hidden = false;
     chatOptions.querySelector("[data-chat-guided]").focus({ preventScroll: true });
   });
+  document.querySelectorAll("[data-form-billing]").forEach((button) => {
+    button.addEventListener("click", () => setFormBilling(button.dataset.formBilling));
+  });
+  document.getElementById("chat-goal").addEventListener("change", () => syncBudgetOptions(null, true));
+  syncBudgetOptions();
   chatForm.addEventListener("submit", (event) => {
     event.preventDefault();
     const message = buildDetailedMessage();

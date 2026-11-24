@@ -4,8 +4,8 @@ Página única de convite: uma ideia sua, tecnologia pronta. O único objetivo �
 
 ## Estrutura
 
-- `index.html` — loading (boot), animação do convite, seções e os 6 protótipos clicáveis.
-- `styles.css` — estética aero/glass, animações e modal com navegador integrado.
+- `index.html` — loading (boot), animação do convite, seções, preços e os 6 protótipos clicáveis.
+- `styles.css` — estética aero/glass, separadores cósmicos, animações e modais.
 - `script.js` — sequência de carregamento, fundo animado, escolha da mensagem, abertura/fechamento dos modais e escala dos iframes.
 - `assets/` — imagens reaproveitadas do `our-site` e ícone.
 
@@ -25,6 +25,16 @@ O CTA **“Quero conversar com a Vista”** abre um painel com duas opções:
 2. **Enviar informações para você se organizar** — abre campos opcionais de nome, negócio, objetivo, prazo, detalhe e investimento; `buildDetailedMessage()` monta o texto final com só o que foi preenchido.
 
 As duas opções terminam sempre no mesmo número, com link público `https://wa.me/5513955488379?text=…`. O selo “Estamos em promoção” aparece no hero e também no rodapé do painel.
+
+## Valores
+
+A seção **Investimento sem surpresa** mostra as faixas e alterna entre tipo de projeto e forma de pagamento:
+
+- **Páginas:** R$ 200–500, R$ 600–900 e R$ 1.200–1.500 por mês.
+- **Sistemas:** a partir de R$ 500/mês, com faixas de R$ 500–900, R$ 1.200–1.500 e sob medida.
+- **Anual à vista:** 10x o valor mensal, equivalente a 12 meses com 2 grátis.
+
+Clicar num cartão abre o painel do WhatsApp já com o objetivo, o regime de pagamento e a faixa escolhidos. No painel, trocar o objetivo ou o pagamento recalcula as opções de investimento antes de gerar a mensagem.
 
 ## Protótipos
 
