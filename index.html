@@ -148,21 +148,33 @@
         <div class="section-head reveal">
           <p class="eyebrow"><span></span> NOSSOS PROTÓTIPOS</p>
           <h2 id="prototipos-title">Janelas que abrem <em>ao vivo.</em></h2>
-          <p class="section-sub">Aqui ficam os protótipos. Cada janela vai abrir uma experiência real, direto do convite.</p>
+          <p class="section-sub">Do primeiro “oi” à primeira versão rodando, sem mistério. Aqui você vê o que já está no ar — toque numa janela e ela abre dentro do convite.</p>
         </div>
         <div class="prototype-grid">
-          <article class="prototype-window reveal" style="--d:.08s">
-            <div class="window-bar"><span class="window-dots"><i></i><i></i><i></i></span><span>prototipo-01</span><span class="window-live"><i></i> EM BREVE</span></div>
-            <div class="window-body"><span class="window-glyph">✦</span><strong>Protótipo 01</strong><small>Janela reservada</small></div>
-          </article>
-          <article class="prototype-window reveal" style="--d:.16s">
-            <div class="window-bar"><span class="window-dots"><i></i><i></i><i></i></span><span>prototipo-02</span><span class="window-live"><i></i> EM BREVE</span></div>
-            <div class="window-body"><span class="window-glyph">⌘</span><strong>Protótipo 02</strong><small>Janela reservada</small></div>
-          </article>
-          <article class="prototype-window reveal" style="--d:.24s">
-            <div class="window-bar"><span class="window-dots"><i></i><i></i><i></i></span><span>prototipo-03</span><span class="window-live"><i></i> EM BREVE</span></div>
-            <div class="window-body"><span class="window-glyph">◎</span><strong>Protótipo 03</strong><small>Janela reservada</small></div>
-          </article>
+          <button type="button" class="prototype-window reveal" style="--d:.06s" data-url="https://nuwget.github.io/bearify/" data-title="bearify" data-owner="Nuwget" aria-label="Abrir bearify em um navegador integrado">
+            <span class="window-bar"><span class="window-dots"><i></i><i></i><i></i></span><span>nuwget / bearify</span><span class="window-live"><i></i> ABRIR ↗</span></span>
+            <span class="window-body"><span class="window-glyph">✦</span><strong>bearify</strong><small>nuwget.github.io</small></span>
+          </button>
+          <button type="button" class="prototype-window reveal" style="--d:.12s" data-url="https://nuwget.github.io/budu-crush/" data-title="Dudu &amp; Bubu" data-owner="Nuwget" aria-label="Abrir Dudu e Bubu em um navegador integrado">
+            <span class="window-bar"><span class="window-dots"><i></i><i></i><i></i></span><span>nuwget / budu-crush</span><span class="window-live"><i></i> ABRIR ↗</span></span>
+            <span class="window-body"><span class="window-glyph">⌘</span><strong>Dudu &amp; Bubu</strong><small>nuwget.github.io</small></span>
+          </button>
+          <button type="button" class="prototype-window reveal" style="--d:.18s" data-url="https://nuwget.github.io/nuwget-page/" data-title="Nuwget — César Rodrigues" data-owner="Nuwget" aria-label="Abrir página da Nuwget em um navegador integrado">
+            <span class="window-bar"><span class="window-dots"><i></i><i></i><i></i></span><span>nuwget / nuwget-page</span><span class="window-live"><i></i> ABRIR ↗</span></span>
+            <span class="window-body"><span class="window-glyph">◎</span><strong>Nuwget</strong><small>nuwget.github.io</small></span>
+          </button>
+          <button type="button" class="prototype-window reveal" style="--d:.24s" data-url="https://nuwget.github.io/welcome-to-your-past/" data-title="Welcome to your past" data-owner="Nuwget" aria-label="Abrir Welcome to your past em um navegador integrado">
+            <span class="window-bar"><span class="window-dots"><i></i><i></i><i></i></span><span>nuwget / welcome-to-your-past</span><span class="window-live"><i></i> ABRIR ↗</span></span>
+            <span class="window-body"><span class="window-glyph">✧</span><strong>Welcome to your past</strong><small>nuwget.github.io</small></span>
+          </button>
+          <button type="button" class="prototype-window reveal" style="--d:.3s" data-url="https://vistanology.github.io/aero-tools/" data-title="Vistanology Open — Aero Tools" data-owner="Vistanology" aria-label="Abrir Aero Tools em um navegador integrado">
+            <span class="window-bar"><span class="window-dots"><i></i><i></i><i></i></span><span>vistanology / aero-tools</span><span class="window-live"><i></i> ABRIR ↗</span></span>
+            <span class="window-body"><span class="window-glyph">⌘</span><strong>Aero Tools</strong><small>vistanology.github.io</small></span>
+          </button>
+          <button type="button" class="prototype-window reveal" style="--d:.36s" data-url="https://vistanology.github.io/our-site/" data-title="Vistanology — Sonhe. Explore. Evolua." data-owner="Vistanology" aria-label="Abrir our-site em um navegador integrado">
+            <span class="window-bar"><span class="window-dots"><i></i><i></i><i></i></span><span>vistanology / our-site</span><span class="window-live"><i></i> ABRIR ↗</span></span>
+            <span class="window-body"><span class="window-glyph">✦</span><strong>Our site</strong><small>vistanology.github.io</small></span>
+          </button>
         </div>
       </div>
     </section>
@@ -182,5 +194,27 @@
       <div class="shell footer-inner"><span>Vistanology</span><span>Um futuro mais bonito.</span><small>© <span id="year">2026</span></small></div>
     </footer>
   </main>
+
+  <!-- Navegador integrado: abre os protótipos sem sair do convite -->
+  <div class="browser-modal" id="browser-modal" hidden role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-backdrop" data-close></div>
+    <div class="browser-frame" role="document">
+      <div class="browser-top">
+        <span class="browser-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="browser-address"><span class="browser-lock" aria-hidden="true"></span><span id="modal-url"></span></span>
+        <button type="button" class="browser-close" id="modal-close" aria-label="Fechar navegador">×</button>
+      </div>
+      <div class="browser-heading">
+        <span class="browser-owner" id="modal-owner"></span>
+        <h2 id="modal-title"></h2>
+        <a id="modal-external" href="#" target="_blank" rel="noopener noreferrer">Abrir em nova aba ↗</a>
+      </div>
+      <div class="browser-viewport">
+        <div class="browser-loading" id="modal-loading"><span class="browser-spinner" aria-hidden="true"></span><span>Abrindo experiência ao vivo…</span></div>
+        <iframe id="modal-frame" title="Prévia ao vivo do protótipo" referrerpolicy="no-referrer"></iframe>
+      </div>
+      <div class="browser-foot"><span>Prévia integrada · Vistanology</span><span>Não carregou? Use “Abrir em nova aba”.</span></div>
+    </div>
+  </div>
 </body>
 </html>

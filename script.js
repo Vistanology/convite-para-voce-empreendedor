@@ -166,4 +166,80 @@
     status.textContent = "Tudo pronto para você.";
     setTimeout(showReveal, delayed(650));
   })();
+
+  // Navegador integrado: cada protótipo abre em um modal com iframe.
+  const modal = document.getElementById("browser-modal");
+  const viewport = document.querySelector(".browser-viewport");
+  const iframe = document.getElementById("modal-frame");
+  const modalTitle = document.getElementById("modal-title");
+  const modalOwner = document.getElementById("modal-owner");
+  const modalUrl = document.getElementById("modal-url");
+  const modalExternal = document.getElementById("modal-external");
+  const modalClose = document.getElementById("modal-close");
+
+  let opener = null;
+  let previousOverflow = "";
+  let closeTimer = 0;
+
+  iframe.addEventListener("load", () => viewport.classList.add("is-loaded"));
+
+  function openPrototype(button) {
+    clearTimeout(closeTimer);
+    opener = button;
+    previousOverflow = document.body.style.overflow;
+    modalTitle.textContent = button.dataset.title || "Protótipo";
+    modalOwner.textContent = button.dataset.owner || "Vistanology";
+    modalUrl.textContent = button.dataset.url || "";
+    modalExternal.href = button.dataset.url || "#";
+    viewport.classList.remove("is-loaded");
+    iframe.removeAttribute("src");
+    iframe.title = `Prévia ao vivo: ${modalTitle.textContent}`;
+    modal.hidden = false;
+    modal.classList.remove("is-closing");
+    document.body.style.overflow = "hidden";
+    requestAnimationFrame(() => {
+      modal.classList.add("is-open");
+      iframe.src = button.dataset.url;
+      modalClose.focus({ preventScroll: true });
+    });
+  }
+
+  function closeModal() {
+    if (modal.hidden) return;
+    clearTimeout(closeTimer);
+    modal.classList.remove("is-open");
+    modal.classList.add("is-closing");
+    document.body.style.overflow = previousOverflow;
+    closeTimer = setTimeout(() => {
+      modal.hidden = true;
+      iframe.removeAttribute("src");
+      modal.classList.remove("is-closing");
+      if (opener) opener.focus({ preventScroll: true });
+    }, delayed(380));
+  }
+
+  document.querySelectorAll(".prototype-window").forEach((button) => {
+    button.addEventListener("click", () => openPrototype(button));
+  });
+  modal.querySelector("[data-close]").addEventListener("click", closeModal);
+  modalClose.addEventListener("click", closeModal);
+
+  window.addEventListener("keydown", (event) => {
+    if (modal.hidden) return;
+    if (event.key === "Escape") {
+      closeModal();
+      return;
+    }
+    if (event.key !== "Tab") return;
+    const focusable = [modalClose, modalExternal];
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  });
 })();
