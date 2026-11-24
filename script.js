@@ -108,12 +108,12 @@
     container.appendChild(frag);
   });
 
-  // Valores: páginas começam em R$ 200/mês; sistemas em R$ 500/mês.
+  // Valores: páginas começam em R$ 100/mês; sistemas em R$ 500/mês.
   // Anual à vista equivale a 10 mensalidades — 12 meses com 2 grátis.
   const brl = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 });
   const PRICE_PLANS = {
     page: [
-      { name: "Essencial", min: 200, max: 500, note: "Uma página focada em transformar visita em contato." },
+      { name: "Essencial", min: 100, max: 500, note: "Uma página focada em transformar visita em contato." },
       { name: "Profissional", min: 600, max: 900, note: "Mais páginas, identidade e integrações com o seu fluxo." },
       { name: "Premium", min: 1200, max: 1500, note: "Experiência completa, conteúdo e acompanhamento." },
     ],

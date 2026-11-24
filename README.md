@@ -5,7 +5,7 @@ Página única de convite: uma ideia sua, tecnologia pronta. O único objetivo �
 ## Estrutura
 
 - `index.html` — loading (boot), animação do convite, seções, preços e os 6 protótipos clicáveis.
-- `styles.css` — estética aero/glass, separadores em feixe de magia hue, animações e modais.
+- `styles.css` — estética aero/glass, separadores em feixe de magia hue com linha branca que atravessa a página, animações e modais.
 - `script.js` — sequência de carregamento, fundo animado, escolha da mensagem, abertura/fechamento dos modais e escala dos iframes.
 - `assets/` — imagens reaproveitadas do `our-site` e ícone.
 
@@ -30,7 +30,7 @@ As duas opções terminam sempre no mesmo número, com link público `https://wa
 
 A seção **Investimento sem surpresa** mostra as faixas e alterna entre tipo de projeto e forma de pagamento:
 
-- **Páginas:** R$ 200–500, R$ 600–900 e R$ 1.200–1.500 por mês.
+- **Páginas:** R$ 100–500, R$ 600–900 e R$ 1.200–1.500 por mês.
 - **Sistemas:** a partir de R$ 500/mês, com faixas de R$ 500–900, R$ 1.200–1.500 e sob medida.
 - **Anual à vista:** 10x o valor mensal, equivalente a 12 meses com 2 grátis.
 

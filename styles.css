@@ -171,7 +171,7 @@ button, a, summary { -webkit-user-select: none; user-select: none; }
 .scroll-cue::after { content: ""; position: absolute; bottom: 0; left: -3px; width: 7px; height: 7px; border-radius: 50%; background: #c9f8ff; box-shadow: 0 0 10px #9fe8ff; animation: cue 2.2s ease-in-out infinite; }
 @keyframes cue { 0%, 100% { opacity: .3; transform: translateY(0); } 50% { opacity: 1; transform: translateY(-14px); } }
 
-.section { padding-block: 84px; }
+.section { position: relative; z-index: 1; padding-block: 84px; }
 .section-head { margin-bottom: 30px; }
 .section-head h2 { margin: 0; font-size: clamp(30px, 4.6vw, 46px); font-weight: 400; line-height: 1.15; letter-spacing: -1.3px; }
 .section-head h2 em { font-style: italic; color: #9ff9eb; }
@@ -205,10 +205,10 @@ button, a, summary { -webkit-user-select: none; user-select: none; }
 .marketing-item strong { font-weight: 600; color: #fff; }
 
 /* ------------------ Separadores: feixe de magia hue ------------------ */
-.hue-divider { position: relative; height: clamp(88px, 10vw, 128px); overflow: hidden; isolation: isolate; background: linear-gradient(180deg, transparent, #0a5c8a1f 50%, transparent); }
-.hue-divider::before { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 50%, #35d5ff1c, transparent 62%); }
-.hue-divider::after { content: ""; position: absolute; left: 4%; right: 4%; top: 50%; height: 1px; background: linear-gradient(90deg, transparent, #a9f2ff61 18%, #ffffffd9 50%, #a9f2ff61 82%, transparent); box-shadow: 0 0 16px #35d5ff80; animation: hue-line 3.2s ease-in-out infinite; }
-@keyframes hue-line { 0%, 100% { opacity: .45; } 50% { opacity: 1; } }
+.hue-divider { position: relative; z-index: 2; height: clamp(88px, 10vw, 128px); overflow: visible; isolation: isolate; }
+.hue-divider::before { content: ""; position: absolute; inset: -90px 0; background: radial-gradient(ellipse at 50% 50%, #35d5ff2e, #b416861a 38%, transparent 70%); pointer-events: none; }
+.hue-divider::after { content: ""; position: absolute; z-index: 2; left: -50vw; right: -50vw; top: 50%; height: 2px; transform: translateY(-50%); background: #fff; -webkit-mask-image: linear-gradient(90deg, transparent, #000 1.5%, #000 98.5%, transparent); mask-image: linear-gradient(90deg, transparent, #000 1.5%, #000 98.5%, transparent); box-shadow: 0 0 12px #ffffffeb, 0 0 44px #35d5ffc9, 0 0 120px #b4168680, 0 0 200px #7beb0040; opacity: .95; animation: hue-line 3.2s ease-in-out infinite; pointer-events: none; }
+@keyframes hue-line { 0%, 100% { opacity: .8; filter: brightness(.9); } 50% { opacity: 1; filter: brightness(1.25); } }
 .hue-beam { position: absolute; left: 50%; top: 50%; width: min(1300px, 125vw); height: 150px; transform: translate(-50%, -50%); background: linear-gradient(90deg, transparent, #ff7a2f00 6%, #ffe60073 26%, #7beb0080 46%, #038aff80 66%, #b4168673 86%, transparent); filter: blur(18px) saturate(1.6) hue-rotate(0deg); mix-blend-mode: screen; opacity: .55; animation: hue-beam 7s ease-in-out infinite alternate, hue-wheel 12s linear infinite; pointer-events: none; }
 .hue-beam-a { clip-path: polygon(0 50%, 100% 6%, 100% 94%, 0 50%); }
 .hue-beam-b { clip-path: polygon(100% 50%, 0 6%, 0 94%, 100% 50%); animation-delay: -3.4s, -6s; }
@@ -217,7 +217,7 @@ button, a, summary { -webkit-user-select: none; user-select: none; }
 @keyframes hue-wheel { to { filter: blur(18px) saturate(1.6) hue-rotate(360deg); } }
 .hue-rays { position: absolute; left: 50%; top: 50%; width: min(900px, 92vw); height: 240px; transform: translate(-50%, -50%); background: repeating-conic-gradient(from 0deg at 50% 50%, #ffffff40 0deg 2.5deg, transparent 2.5deg 15deg); -webkit-mask-image: radial-gradient(ellipse at 50% 50%, #000 0, transparent 72%); mask-image: radial-gradient(ellipse at 50% 50%, #000 0, transparent 72%); mix-blend-mode: screen; opacity: .55; animation: hue-rays 18s linear infinite; pointer-events: none; }
 @keyframes hue-rays { to { rotate: 360deg; filter: hue-rotate(360deg); } }
-.hue-core { position: absolute; left: 50%; top: 50%; display: grid; place-items: center; width: 58px; height: 58px; transform: translate(-50%, -50%); border: 1px solid #e6ffffb8; border-radius: 20px; background: conic-gradient(from 0deg, #ff7a2f, #ffe600, #7beb00, #03a269, #038aff, #444bdb, #b41686, #ff7a2f); box-shadow: 0 0 0 5px #ffffff12, 0 0 34px #35d5ffb3, inset 0 2px 6px #ffffffb3; animation: hue-core 5s ease-in-out infinite; }
+.hue-core { position: absolute; z-index: 3; left: 50%; top: 50%; display: grid; place-items: center; width: 58px; height: 58px; transform: translate(-50%, -50%); pointer-events: none; border: 1px solid #e6ffffb8; border-radius: 20px; background: conic-gradient(from 0deg, #ff7a2f, #ffe600, #7beb00, #03a269, #038aff, #444bdb, #b41686, #ff7a2f); box-shadow: 0 0 0 5px #ffffff12, 0 0 34px #35d5ffb3, inset 0 2px 6px #ffffffb3; animation: hue-core 5s ease-in-out infinite; }
 .hue-core::before { content: ""; position: absolute; inset: -12px; border: 1px solid #c9f2ff70; border-radius: 28px; animation: hue-ring 3s ease-out infinite; }
 .hue-core .glass-emblem { position: relative; z-index: 1; width: 36px; height: 36px; filter: drop-shadow(0 0 6px #ffffffcc); }
 @keyframes hue-core { 0%, 100% { filter: hue-rotate(0deg) drop-shadow(0 0 8px #35d5ff99); translate: 0 -3px; } 50% { filter: hue-rotate(180deg) drop-shadow(0 0 16px #c5ffdfcc); translate: 0 3px; } }
