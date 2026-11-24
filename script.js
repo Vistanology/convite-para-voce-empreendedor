@@ -176,10 +176,14 @@
   const modalUrl = document.getElementById("modal-url");
   const modalExternal = document.getElementById("modal-external");
   const modalClose = document.getElementById("modal-close");
+  const magic = document.getElementById("magic-transition");
+  const magicTitle = document.getElementById("magic-title");
+  const magicSparks = document.getElementById("magic-sparks");
 
   let opener = null;
   let previousOverflow = "";
   let closeTimer = 0;
+  let magicTimer = 0;
 
   // Cada protótipo é renderizado em 1440x900 e escalado para caber no monitor inteiro.
   const FIT_WIDTH = 1440;
@@ -198,13 +202,52 @@
   iframe.addEventListener("load", () => {
     viewport.classList.add("is-loaded");
     fitIframe();
+    if (!modal.hidden) modalClose.focus({ preventScroll: true });
   });
   window.addEventListener("resize", fitIframe);
 
-  function openPrototype(button) {
-    clearTimeout(closeTimer);
-    opener = button;
-    previousOverflow = document.body.style.overflow;
+  // A arte do perfil Vistanology aparece e envolve o site antes de cada abertura.
+  function buildSparks() {
+    magicSparks.replaceChildren();
+    if (reduceMotion) return;
+    for (let index = 0; index < 22; index += 1) {
+      const spark = document.createElement("span");
+      spark.className = "magic-spark";
+      spark.style.left = `${8 + Math.random() * 84}%`;
+      spark.style.top = `${52 + Math.random() * 44}%`;
+      spark.style.setProperty("--size", `${2 + Math.random() * 4}px`);
+      spark.style.setProperty("--delay", `${Math.random() * .8}s`);
+      spark.style.setProperty("--duration", `${1.4 + Math.random() * 1.3}s`);
+      spark.style.setProperty("--dx", `${(Math.random() - .5) * 160}px`);
+      magicSparks.appendChild(spark);
+    }
+  }
+
+  function runMagic(button, launch) {
+    if (reduceMotion) {
+      launch();
+      return;
+    }
+    clearTimeout(magicTimer);
+    magicTitle.textContent = button.dataset.title || "Protótipo";
+    magic.hidden = false;
+    magic.classList.remove("is-leaving");
+    magic.removeAttribute("aria-hidden");
+    document.body.style.overflow = "hidden";
+    buildSparks();
+    requestAnimationFrame(() => magic.classList.add("is-open"));
+    magicTimer = setTimeout(() => {
+      magic.classList.add("is-leaving");
+      magicTimer = setTimeout(() => {
+        magic.hidden = true;
+        magic.classList.remove("is-open", "is-leaving");
+        magic.setAttribute("aria-hidden", "true");
+        launch();
+      }, 420);
+    }, 1050);
+  }
+
+  function showModal(button) {
     modalTitle.textContent = button.dataset.title || "Protótipo";
     modalOwner.textContent = button.dataset.owner || "Vistanology";
     modalUrl.textContent = button.dataset.url || "";
@@ -221,6 +264,14 @@
       iframe.src = button.dataset.url;
       modalClose.focus({ preventScroll: true });
     });
+  }
+
+  function openPrototype(button) {
+    if (!modal.hidden || !magic.hidden) return;
+    clearTimeout(closeTimer);
+    opener = button;
+    previousOverflow = document.body.style.overflow;
+    runMagic(button, () => showModal(button));
   }
 
   function closeModal() {
