@@ -181,7 +181,25 @@
   let previousOverflow = "";
   let closeTimer = 0;
 
-  iframe.addEventListener("load", () => viewport.classList.add("is-loaded"));
+  // Cada protótipo é renderizado em 1440x900 e escalado para caber no monitor inteiro.
+  const FIT_WIDTH = 1440;
+  const FIT_HEIGHT = 900;
+
+  function fitIframe() {
+    if (modal.hidden) return;
+    const area = viewport.getBoundingClientRect();
+    if (!area.width || !area.height) return;
+    const scale = Math.min(area.width / FIT_WIDTH, area.height / FIT_HEIGHT);
+    const left = (area.width - FIT_WIDTH * scale) / 2;
+    const top = (area.height - FIT_HEIGHT * scale) / 2;
+    iframe.style.transform = `translate(${left}px, ${top}px) scale(${scale})`;
+  }
+
+  iframe.addEventListener("load", () => {
+    viewport.classList.add("is-loaded");
+    fitIframe();
+  });
+  window.addEventListener("resize", fitIframe);
 
   function openPrototype(button) {
     clearTimeout(closeTimer);
@@ -199,6 +217,7 @@
     document.body.style.overflow = "hidden";
     requestAnimationFrame(() => {
       modal.classList.add("is-open");
+      fitIframe();
       iframe.src = button.dataset.url;
       modalClose.focus({ preventScroll: true });
     });
