@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#052a45" />
+  <title>Um convite para você — Vistanology</title>
+  <meta name="description" content="Um convite da Vistanology para empreendedores que querem transformar uma ideia em sistema, landing page ou presença digital que funciona. Envie uma mensagem no WhatsApp e vamos conversar." />
+  <meta property="og:title" content="Um convite para você — Vistanology" />
+  <meta property="og:description" content="Seu próximo sistema ou landing page começa com uma conversa. Envie seu convite pelo WhatsApp." />
+  <meta property="og:locale" content="pt_BR" />
+  <meta property="og:type" content="website" />
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+  <!-- Sprite da marca Vistanology (reaproveitado do our-site) -->
+  <svg class="svg-sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="vpane0" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fffcb4" /><stop offset=".5" stop-color="#ff5e2f" /><stop offset="1" stop-color="#b41686" /></linearGradient>
+      <linearGradient id="vpane1" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d8ff93" /><stop offset=".5" stop-color="#7beb00" /><stop offset="1" stop-color="#03a269" /></linearGradient>
+      <linearGradient id="vpane2" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#bdfbff" /><stop offset=".5" stop-color="#038aff" /><stop offset="1" stop-color="#444bdb" /></linearGradient>
+      <linearGradient id="vpane3" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffffbf" /><stop offset=".5" stop-color="#ffe600" /><stop offset="1" stop-color="#ff961a" /></linearGradient>
+      <linearGradient id="vshine" x1="0" y1="0" x2=".4" y2="1"><stop stop-color="#fff" stop-opacity=".95" /><stop offset=".45" stop-color="#fff" stop-opacity=".08" /><stop offset=".55" stop-color="#fff" stop-opacity="0" /><stop offset="1" stop-color="#fff" stop-opacity=".7" /></linearGradient>
+      <filter id="vdepth" x="-30%" y="-30%" width="170%" height="170%"><feDropShadow dx="1" dy="4" stdDeviation="2" flood-color="#003277" flood-opacity=".6" /></filter>
+      <symbol id="vista-emblem" viewBox="0 0 112 112" fill="none">
+        <g filter="url(#vdepth)" transform="rotate(8 56 56)">
+          <g><path d="M17 12Q34 5 55 13L49 50Q29 43 11 51Z" fill="url(#vpane0)" stroke="#e7ffff" stroke-width="1.4" /><path d="M17 12Q34 5 55 13L49 50Q29 43 11 51Z" fill="url(#vshine)" stroke="#fff" stroke-opacity=".5" stroke-width=".7" transform="translate(2 -2) scale(.97)" /></g>
+          <g><path d="M61 15Q81 23 102 13L96 51Q74 60 55 52Z" fill="url(#vpane1)" stroke="#e7ffff" stroke-width="1.4" /><path d="M61 15Q81 23 102 13L96 51Q74 60 55 52Z" fill="url(#vshine)" stroke="#fff" stroke-opacity=".5" stroke-width=".7" transform="translate(2 -2) scale(.97)" /></g>
+          <g><path d="M10 57Q28 49 48 57L42 96Q23 87 4 97Z" fill="url(#vpane2)" stroke="#e7ffff" stroke-width="1.4" /><path d="M10 57Q28 49 48 57L42 96Q23 87 4 97Z" fill="url(#vshine)" stroke="#fff" stroke-opacity=".5" stroke-width=".7" transform="translate(2 -2) scale(.97)" /></g>
+          <g><path d="M54 59Q73 67 95 57L89 96Q68 107 47 98Z" fill="url(#vpane3)" stroke="#e7ffff" stroke-width="1.4" /><path d="M54 59Q73 67 95 57L89 96Q68 107 47 98Z" fill="url(#vshine)" stroke="#fff" stroke-opacity=".5" stroke-width=".7" transform="translate(2 -2) scale(.97)" /></g>
+        </g>
+      </symbol>
+    </defs>
+  </svg>
+
+  <!-- Loading reaproveitado do our-site, agora em contexto de convite -->
+  <div class="vista-boot" id="boot" role="dialog" aria-modal="true" aria-label="Preparando seu convite Vistanology">
+    <div class="boot-scene" aria-hidden="true">
+      <picture class="boot-bg-frame">
+        <source media="(max-width: 700px)" srcset="assets/aero-horizon-mobile.webp" />
+        <img class="boot-bg" src="assets/aero-horizon.webp" alt="" width="1782" height="883" fetchpriority="high" />
+      </picture>
+      <span class="boot-haze"></span><span class="boot-mist"></span><span class="boot-rays"></span>
+      <span class="boot-vignette"></span><span class="boot-bloom" id="boot-bloom"></span><span class="boot-sheen"></span>
+      <div class="boot-particles" id="boot-particles"></div>
+    </div>
+
+    <div class="boot-stage" id="boot-stage">
+      <div class="boot-emblem">
+        <span class="boot-halo"></span><span class="boot-halo-breath"></span>
+        <span class="boot-sphere"><svg class="glass-emblem"><use href="#vista-emblem" /></svg><span class="boot-sphere-sheen"></span></span>
+      </div>
+      <p class="boot-wordmark">Vistanology</p>
+      <div class="boot-loading">
+        <div class="boot-bar" id="boot-bar" role="progressbar" aria-label="Carregando seu convite" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <span class="boot-fill" id="boot-fill"><span class="boot-fill-sheen"></span></span>
+          <span class="boot-tip" id="boot-tip"></span>
+        </div>
+        <div class="boot-status-slot"><p class="boot-status" id="boot-status">Preparando seu convite…</p></div>
+      </div>
+    </div>
+
+    <div class="boot-reveal" id="boot-reveal" hidden>
+      <div class="reveal-card">
+        <span class="reveal-orb"><svg class="glass-emblem"><use href="#vista-emblem" /></svg></span>
+        <span class="reveal-kicker">VISTANOLOGY</span>
+        <h2>Uma mensagem chegou para você.</h2>
+        <p>Ela não é uma propaganda. É um convite para transformar uma ideia em algo real.</p>
+        <span class="reveal-line"></span>
+        <span class="reveal-hint">Abrindo o convite…</span>
+      </div>
+    </div>
+
+    <button type="button" class="boot-skip" id="boot-skip">Pular introdução</button>
+    <p class="boot-footer">© Vistanology · um futuro mais bonito</p>
+  </div>
+
+  <main id="conteudo" class="site" aria-hidden="true">
+    <header class="header-wrap">
+      <div class="navbar">
+        <span class="brand"><svg class="glass-emblem"><use href="#vista-emblem" /></svg><span>Vistanology<span class="brand-caption">um futuro mais bonito</span></span></span>
+        <span class="nav-pill"><span class="nav-dot"></span>Convite aberto</span>
+      </div>
+    </header>
+
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-bg" aria-hidden="true"><img src="assets/invitation-cosmos.webp" alt="" /><span class="hero-shade"></span></div>
+      <div class="shell hero-inner">
+        <p class="eyebrow"><span class="eyebrow-dot"></span> CONVITE PESSOAL · VISTANOLOGY</p>
+        <h1 id="hero-title">Você foi convidado<br /><em>a criar algo que importa.</em></h1>
+        <p class="hero-lead">Se você tem uma ideia de sistema, uma landing page ou um negócio que precisa ganhar forma digital, este é o momento de tirar a conversa do papel.</p>
+        <a class="aero-button cta" data-wa href="#"><svg class="wa-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2C6.5 2 2.1 6.4 2.1 11.94c0 1.75.46 3.46 1.32 4.96L2 22l5.24-1.37a9.9 9.9 0 0 0 4.8 1.22h.01c5.54 0 10.44-4.4 10.44-9.94C22.49 6.4 18.58 2 12.04 2Zm0 18.14a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.11.81.83-3.03-.2-.31a8.18 8.18 0 0 1-1.26-4.35c0-4.53 3.69-8.21 8.22-8.21 2.2 0 4.26.86 5.81 2.41a8.15 8.15 0 0 1 2.4 5.8c0 4.53-3.68 8.21-8.21 8.21Zm4.5-6.14c-.25-.12-1.47-.73-1.7-.81-.23-.08-.4-.12-.57.12-.17.25-.65.81-.8.98-.15.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23a7.56 7.56 0 0 1-1.51-1.89c-.15-.25-.02-.39.12-.51.12-.12.25-.29.37-.44.12-.15.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.12-.57-1.37-.78-1.88-.2-.49-.41-.42-.57-.43h-.49c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1s.9 2.44 1.03 2.61c.12.17 1.77 2.7 4.29 3.79.6.26 1.07.42 1.43.54.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.15-1.18-.06-.1-.23-.16-.48-.28Z" /></svg><span>Enviar convite no WhatsApp</span></a>
+        <p class="hero-meta">Uma conversa rápida, sem compromisso. <span id="wa-display">+55 (13) 95548-8379</span></p>
+      </div>
+      <div class="hero-bottom" aria-hidden="true"><span>Role para conhecer o convite</span></div>
+    </section>
+
+    <section class="section intro" aria-labelledby="intro-title">
+      <div class="shell">
+        <p class="eyebrow"><span class="eyebrow-dot"></span> O QUE É ESTE CONVITE</p>
+        <div class="glass-panel intro-panel">
+          <span class="intro-orb"><svg class="glass-emblem"><use href="#vista-emblem" /></svg></span>
+          <div>
+            <h2 id="intro-title">Não é uma proposta pronta. É um começo.</h2>
+            <p>A Vistanology é uma consultoria que cria <strong>sistemas sob medida</strong> e <strong>landing pages</strong> para quem quer transformar uma ideia em algo que funcione de verdade — bonito, rápido e feito para o seu negócio.</p>
+            <p>Este convite existe para uma coisa simples: abrir uma conversa entre você e a Vistanology pelo WhatsApp. É só isso. Sem formulário longo, sem cadastro, sem etapas escondidas.</p>
+          </div>
+        </div>
+        <div class="promise-grid">
+          <article class="promise-card"><span class="promise-index">01</span><h3>Feito para o seu contexto</h3><p>Nada de modelo genérico. A solução nasce do seu objetivo, do seu público e do que o seu negócio precisa hoje.</p></article>
+          <article class="promise-card"><span class="promise-index">02</span><h3>Clareza antes de qualquer código</h3><p>Você entende escopo, prazo e investimento antes de decidir. A conversa vem primeiro; o projeto, depois.</p></article>
+          <article class="promise-card"><span class="promise-index">03</span><h3>Você acompanha de perto</h3><p>Versões, ajustes e Entrega explicada em linguagem simples. Sem mistério e sem “pra depois”.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section services" aria-labelledby="services-title">
+      <div class="shell">
+        <div class="section-heading">
+          <p class="eyebrow"><span class="eyebrow-dot"></span> O QUE PODEMOS CONSTRUIR JUNTOS</p>
+          <h2 id="services-title">Escolha o ponto de partida.<br /><span>A conversa define o resto.</span></h2>
+          <p>Muitas vezes você não sabe se precisa de um sistema, de uma página ou dos dois. Tudo bem — é exatamente sobre isso que a conversa no WhatsApp serve.</p>
+        </div>
+        <div class="service-grid">
+          <article class="service-card">
+            <span class="service-icon" aria-hidden="true">⌘</span>
+            <h3>Sistemas web</h3>
+            <p>Painéis, áreas de cliente, controles internos, agendamentos, catálogos e automações. Ferramentas que tiram trabalho repetitivo do seu dia a dia.</p>
+            <ul><li>Fluxos e telas sob medida</li><li>Integrações e automações</li><li>Evolução por etapas</li></ul>
+          </article>
+          <article class="service-card">
+            <span class="service-icon" aria-hidden="true">✦</span>
+            <h3>Landing pages</h3>
+            <p>Uma página com um único objetivo: transformar visita em contato, venda ou cadastro. Copy, layout, responsividade e velocidade pensados juntos.</p>
+            <ul><li>Estrutura e texto persuasivo</li><li>Design responsivo e rápido</li><li>Integração com WhatsApp e métricas</li></ul>
+          </article>
+          <article class="service-card">
+            <span class="service-icon" aria-hidden="true">◎</span>
+            <h3>Consultoria digital</h3>
+            <p>Diagnóstico, organização de ideias e direção técnica. Para transformar “tenho uma ideia” em um plano que dá para executar.</p>
+            <ul><li>Descoberta e priorização</li><li>Arquitetura e escopo</li><li>Roteiro de evolução</li></ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section how" aria-labelledby="how-title">
+      <div class="shell">
+        <div class="section-heading">
+          <p class="eyebrow"><span class="eyebrow-dot"></span> COMO ACONTECE</p>
+          <h2 id="how-title">Quatro passos.<br /><span>Uma conversa para começar.</span></h2>
+        </div>
+        <ol class="steps">
+          <li><span class="step-num">01</span><div><h3>Você envia o convite</h3><p>Toque no botão e mande a mensagem já preparada pelo WhatsApp. Leva menos de um minuto.</p></div></li>
+          <li><span class="step-num">02</span><div><h3>Contamos o que importa</h3><p>Você fala sobre o negócio, o problema e o resultado que espera. A Vistanology faz as perguntas certas.</p></div></li>
+          <li><span class="step-num">03</span><div><h3>O caminho fica claro</h3><p>Você recebe uma proposta com escopo, etapas, prazo e investimento. Não existe obrigação em seguir adiante.</p></div></li>
+          <li><span class="step-num">04</span><div><h3>A ideia ganha forma</h3><p>Se fizer sentido para os dois, o projeto começa — com acompanhamento e entrega explicada paso a paso.</p></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section audience" aria-labelledby="audience-title">
+      <div class="shell audience-grid">
+        <div>
+          <p class="eyebrow"><span class="eyebrow-dot"></span> PARA QUEM</p>
+          <h2 id="audience-title">Se você se reconhece aqui,<br /><span>o convite é seu.</span></h2>
+          <p class="audience-copy">Empreendedores, pequenos negócios, profissionais autônomos e equipes que têm uma ideia boa presa em uma planilha, um rascunho ou uma conversa de WhatsApp.</p>
+        </div>
+        <div class="audience-list">
+          <p><span>✓</span> Quer vender ou divulgar algo e não tem uma página que convença.</p>
+          <p><span>✓</span> Sente que processos manuais estão comendo seu tempo.</p>
+          <p><span>✓</span> Já tentou uma solução pronta e ela não se encaixou.</p>
+          <p><span>✓</span> Tem uma ideia de sistema, mas não sabe por onde começar.</p>
+          <p><span>✓</span> Quer um parceiro para pensar junto, não só um fornecedor.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section faq" aria-labelledby="faq-title">
+      <div class="shell">
+        <div class="section-heading centered">
+          <p class="eyebrow"><span class="eyebrow-dot"></span> ANTES DE ME CHAMAR</p>
+          <h2 id="faq-title">Perguntas frequentes</h2>
+          <p>Respostas curtas para você saber exatamente o que acontece depois da mensagem.</p>
+        </div>
+        <div class="faq-list">
+          <details><summary>Preciso ter a ideia pronta para conversar?</summary><p>Não. Muito pelo contrário: a conversa existe justamente para organizar a ideia. Você pode chegar com uma frase, um problema ou apenas uma vontade.</p></details>
+          <details><summary>Isso é um orçamento fechado?</summary><p>Não. O primeiro contato é uma conversa de descoberta. Depois dela, você recebe uma proposta clara — e decide com calma se quer seguir.</p></details>
+          <details><summary>Vocês criam só landing pages?</summary><p>Não. A Vistanology cria landing pages, sistemas web e também ajuda na consultoria e no planejamento digital. O melhor formato depende do seu objetivo.</p></details>
+          <details><summary>Como o preço é definido?</summary><p>Depois de entender escopo, prazo e complexidade. Nada é cobrado antes de você aprovar a proposta.</p></details>
+          <details><summary>Posso acompanhar o desenvolvimento?</summary><p>Sim. Você vê versões, acompanha a evolução e participa dos ajustes até a entrega.</p></details>
+          <details><summary>O que eu ganho ao enviar esta mensagem?</summary><p>Uma conversa honesta sobre o que é possível fazer pelo seu negócio — mesmo que a resposta seja “ainda não é hora”.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <section class="section final" aria-labelledby="final-title">
+      <div class="shell">
+        <div class="glass-panel final-card">
+          <span class="final-orb"><svg class="glass-emblem"><use href="#vista-emblem" /></svg></span>
+          <p class="eyebrow"><span class="eyebrow-dot"></span> O CONVITE ESTÁ ABERTO</p>
+          <h2 id="final-title">Que a gente construa<br /><em>um pouco de cor hoje.</em></h2>
+          <p>Um sistema, uma página ou só uma conversa para clarear o caminho. O próximo passo cabe numa mensagem.</p>
+          <a class="aero-button cta" data-wa href="#"><svg class="wa-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2C6.5 2 2.1 6.4 2.1 11.94c0 1.75.46 3.46 1.32 4.96L2 22l5.24-1.37a9.9 9.9 0 0 0 4.8 1.22h.01c5.54 0 10.44-4.4 10.44-9.94C22.49 6.4 18.58 2 12.04 2Zm0 18.14a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.11.81.83-3.03-.2-.31a8.18 8.18 0 0 1-1.26-4.35c0-4.53 3.69-8.21 8.22-8.21 2.2 0 4.26.86 5.81 2.41a8.15 8.15 0 0 1 2.4 5.8c0 4.53-3.68 8.21-8.21 8.21Zm4.5-6.14c-.25-.12-1.47-.73-1.7-.81-.23-.08-.4-.12-.57.12-.17.25-.65.81-.8.98-.15.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23a7.56 7.56 0 0 1-1.51-1.89c-.15-.25-.02-.39.12-.51.12-.12.25-.29.37-.44.12-.15.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.12-.57-1.37-.78-1.88-.2-.49-.41-.42-.57-.43h-.49c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1s.9 2.44 1.03 2.61c.12.17 1.77 2.7 4.29 3.79.6.26 1.07.42 1.43.54.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.15-1.18-.06-.1-.23-.16-.48-.28Z" /></svg><span>Enviar convite no WhatsApp</span></a>
+          <p class="final-note">Ou chame direto: <a href="https://wa.me/5513955488379" rel="noopener">+55 (13) 95548-8379</a></p>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="shell footer-inner">
+        <span class="brand"><svg class="glass-emblem"><use href="#vista-emblem" /></svg><span>Vistanology<span class="brand-caption">um futuro mais bonito</span></span></span>
+        <p>Um convite, uma conversa, uma ideia ganhando forma.</p>
+        <small>© <span id="year">2026</span> Vistanology</small>
+      </div>
+    </footer>
+  </main>
+</body>
+</html>
