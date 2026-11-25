@@ -13,8 +13,8 @@
   <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="dns-prefetch" href="https://wa.me" />
-  <link rel="stylesheet" href="styles.css?v=20261125c" />
-  <script src="script.js?v=20261125c" defer></script>
+  <link rel="stylesheet" href="styles.css?v=20261125e" />
+  <script src="script.js?v=20261125e" defer></script>
 </head>
 <body>
   <div class="ambience" aria-hidden="true"><canvas class="ambience-dust"></canvas></div>
@@ -78,7 +78,7 @@
 
   <main id="conteudo" class="site" aria-hidden="true">
     <header class="navbar rise" id="navbar" aria-label="Navegação principal">
-      <a class="nav-brand" href="#inicio"><svg class="glass-emblem"><use href="#vista-emblem" /></svg><span>Vistanology</span></a>
+      <a class="nav-brand" href="#inicio"><span class="nav-logo" aria-hidden="true"><img src="assets/vistanology-logo.webp" alt="" width="1024" height="1024" /></span><span>Vistanology</span></a>
       <div class="nav-links" role="navigation">
         <a href="#inicio" aria-current="page">Início</a>
         <a href="#projetos">Projetos</a>
@@ -166,6 +166,14 @@
     </section>
 
     <section class="section software" id="softwares" aria-labelledby="softwares-title">
+      <div class="software-scene" aria-hidden="true">
+        <img src="assets/aero-horizon.webp" alt="" width="1536" height="1024" loading="lazy" />
+        <span class="software-bubble" style="--size:58px;--x:8%;--delay:-2s;--duration:15s"></span>
+        <span class="software-bubble" style="--size:24px;--x:23%;--delay:-8s;--duration:18s"></span>
+        <span class="software-bubble" style="--size:42px;--x:78%;--delay:-5s;--duration:17s"></span>
+        <span class="software-bubble" style="--size:18px;--x:91%;--delay:-11s;--duration:14s"></span>
+        <span class="software-bubble" style="--size:30px;--x:48%;--delay:-6s;--duration:20s"></span>
+      </div>
       <div class="shell">
         <div class="section-head reveal">
           <p class="eyebrow"><span></span> TECNOLOGIA EM USO</p>
@@ -173,12 +181,12 @@
           <p class="section-sub">Detalhes técnicos, seguros e feitos para entregar na velocidade certa.</p>
         </div>
         <div class="software-grid reveal">
-          <article class="software-item" data-pair="0"><strong>Next.js</strong><span>Framework moderno</span></article>
-          <article class="software-item" data-pair="1"><strong>React</strong><span>Interfaces dinâmicas</span></article>
-          <article class="software-item" data-pair="2"><strong>Tailwind CSS</strong><span>Estilo sustentável</span></article>
-          <article class="software-item" data-pair="3"><strong>TypeScript</strong><span>Type safety</span></article>
-          <article class="software-item" data-pair="4"><strong>PostgreSQL</strong><span>Banco estável</span></article>
-          <article class="software-item" data-pair="5"><strong>Node.js</strong><span>Backend leve</span></article>
+          <article class="software-item" data-pair="0"><span class="software-icon" aria-hidden="true">N</span><strong>Next.js</strong><span class="software-description">Framework moderno</span></article>
+          <article class="software-item" data-pair="1"><span class="software-icon" aria-hidden="true">⚛</span><strong>React</strong><span class="software-description">Interfaces dinâmicas</span></article>
+          <article class="software-item" data-pair="2"><span class="software-icon" aria-hidden="true">≋</span><strong>Tailwind CSS</strong><span class="software-description">Estilo sustentável</span></article>
+          <article class="software-item" data-pair="3"><span class="software-icon software-icon--ts" aria-hidden="true">TS</span><strong>TypeScript</strong><span class="software-description">Type safety</span></article>
+          <article class="software-item" data-pair="4"><span class="software-icon" aria-hidden="true">P</span><strong>PostgreSQL</strong><span class="software-description">Banco estável</span></article>
+          <article class="software-item" data-pair="5"><span class="software-icon" aria-hidden="true">⬡</span><strong>Node.js</strong><span class="software-description">Backend leve</span></article>
         </div>
       </div>
     </section>
