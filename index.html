@@ -13,8 +13,8 @@
   <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="dns-prefetch" href="https://wa.me" />
-  <link rel="stylesheet" href="styles.css?v=20261124e" />
-  <script src="script.js?v=20261124e" defer></script>
+  <link rel="stylesheet" href="styles.css?v=20261125c" />
+  <script src="script.js?v=20261125c" defer></script>
 </head>
 <body>
   <div class="ambience" aria-hidden="true"><canvas class="ambience-dust"></canvas></div>
@@ -45,7 +45,7 @@
     <canvas class="boot-particles" id="boot-particles" width="1024" height="576" aria-hidden="true"></canvas>
     <div class="boot-stage" id="boot-stage">
       <div class="boot-panel">
-        <span class="boot-core"><svg class="glass-emblem"><use href="#vista-emblem" /></svg></span>
+        <span class="boot-core"><img class="opening-logo" src="assets/vistanology-logo.webp" alt="" width="1024" height="1024" fetchpriority="high" /></span>
         <p class="boot-wordmark">Vistanology</p>
         <div class="boot-loading">
           <div class="boot-bar" id="boot-bar" role="progressbar" aria-label="Carregando seu convite" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
@@ -67,7 +67,7 @@
   <div class="invite-reveal" id="reveal" hidden aria-hidden="true">
     <div class="invite-card">
       <span class="invite-shine" aria-hidden="true"></span>
-      <span class="invite-seal"><svg class="glass-emblem"><use href="#vista-emblem" /></svg></span>
+      <span class="invite-seal"><img class="opening-logo" src="assets/vistanology-logo.webp" alt="" width="1024" height="1024" /></span>
       <span class="invite-kicker">VISTANOLOGY · CONVITE</span>
       <h2>Para você,<br /><em>que está construindo algo.</em></h2>
       <p>Há uma ideia esperando para ganhar forma.</p>
@@ -97,7 +97,7 @@
         <span class="hero-grid-orb hero-grid-orb--teal" style="--x:62% --y:98% --size:300px"></span>
       </div>
       <div class="shell hero-inner">
-        <span class="hero-logo rise" style="--d:.12s" aria-hidden="true"><img src="assets/vistanology-avatar.png" alt="" width="120" height="120" /></span>
+        <span class="hero-logo rise" style="--d:.12s" aria-hidden="true"><img src="assets/vistanology-logo.webp" alt="" width="1024" height="1024" fetchpriority="high" /></span>
         <p class="eyebrow rise" style="--d:.22s"><span></span> VISTANOLOGY · NOSSO SONHO DIGITAL</p>
         <h1 id="hero-title" class="rise" style="--d:.3s">Uma ideia sua.<br /><em>Tecnologia pronta.</em></h1>
         <p class="hero-lead rise" style="--d:.38s">Universo de tecnologia feito para empregos que querem tirar o digital do papel. Transformamos ideias em sistemas e landing pages com clareza, ritmo e um visual que faz sentido.</p>
@@ -137,6 +137,31 @@
             <span class="offer-rule" aria-hidden="true"></span>
           </article>
         </div>
+
+        <article class="store-showcase reveal" aria-labelledby="store-title">
+          <div class="store-visual">
+            <span class="store-orbit store-orbit--one" aria-hidden="true"></span>
+            <span class="store-orbit store-orbit--two" aria-hidden="true"></span>
+            <div class="store-phone">
+              <video class="store-video" muted loop playsinline controls preload="metadata" poster="assets/nostro-fumo-poster.jpg" aria-label="Prévia do protótipo de loja da Nostro Fumo">
+                <source src="assets/nostro-fumo-prototipo.mp4" type="video/mp4" />
+                Seu navegador não oferece suporte à reprodução de vídeo.
+              </video>
+            </div>
+            <span class="store-duration"><i aria-hidden="true"></i> Prévia · 27 segundos</span>
+          </div>
+          <div class="store-copy">
+            <p class="eyebrow"><span></span> PROJETO EM DESTAQUE</p>
+            <h3 id="store-title">Nostro Fumo<br /><em>no digital.</em></h3>
+            <p>Uma prévia do protótipo de loja: identidade, navegação e experiência de compra apresentadas em uma interface pensada para o celular.</p>
+            <div class="store-tags" aria-label="Características do projeto">
+              <span>Landing page</span>
+              <span>Protótipo</span>
+              <span>Experiência mobile</span>
+            </div>
+            <a class="store-link" href="assets/nostro-fumo-prototipo.mp4" target="_blank" rel="noopener">Abrir vídeo em uma nova aba <span aria-hidden="true">↗</span></a>
+          </div>
+        </article>
       </div>
     </section>
 

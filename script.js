@@ -538,6 +538,22 @@
     items.forEach((item) => observer.observe(item));
   }
 
+  function observeStoreVideo() {
+    const video = document.querySelector(".store-video");
+    if (!video || reduceMotion) return;
+    if (!("IntersectionObserver" in window)) {
+      video.play().catch(() => {});
+      return;
+    }
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) video.play().catch(() => {});
+        else video.pause();
+      });
+    }, { threshold: .15 });
+    observer.observe(video);
+  }
+
   function finish() {
     if (finished) return;
     finished = true;
@@ -550,6 +566,7 @@
     document.body.style.overflow = "";
     window.scrollTo(0, 0);
     observeReveals();
+    observeStoreVideo();
     setTimeout(() => {
       boot.hidden = true;
       reveal.hidden = true;
